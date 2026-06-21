@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export type BlogPostDisplay = {
+  coverImage?: string;
   slug: string;
   tag: string;
   tagColor: string;
