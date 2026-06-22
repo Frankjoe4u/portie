@@ -107,8 +107,8 @@ export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
 
             {featured.coverImage && (
               <div className="absolute inset-0 z-0">
-                <img src={featured.coverImage} alt={featured.title} className="w-full h-full object-cover opacity-50" />
-                <div className="absolute inset-0" style={{background:"linear-gradient(to top, rgba(13,0,32,0.95) 40%, rgba(13,0,32,0.2) 100%)"}} />
+                <img src={featured.coverImage} alt={featured.title} className="w-full h-full object-cover opacity-80" />
+                <div className="absolute inset-0" style={{background:"linear-gradient(to top, rgba(13,0,32,0.75) 35%, rgba(13,0,32,0.1) 100%)"}} />
               </div>
             )}
             <div className="relative z-10 p-8">
