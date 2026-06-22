@@ -11,7 +11,7 @@ import Blog from '@/components/Blog'
 
 const page = () => {
   return (
-    <div>
+    <div style={{ background: "#ffffff" }}>
       <Navbar />
       <Home />
       <About />
