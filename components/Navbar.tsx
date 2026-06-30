@@ -54,10 +54,11 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
             ? "bg-[#0d0020]/90 backdrop-blur-md border-b border-purple-900/40 shadow-lg shadow-black/30"
             : "bg-transparent"
-          }`}
+        }`}
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -93,10 +94,11 @@ export default function Navbar() {
                     e.preventDefault();
                     handleNavClick(href);
                   }}
-                  className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 ${isActive
+                  className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 ${
+                    isActive
                       ? "text-black bg-yellow-400"
                       : "text-gray-400 hover:text-white hover:bg-white/5"
-                    }`}
+                  }`}
                 >
                   {label}
                 </a>
@@ -106,7 +108,7 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <a
-            href="/cv.pdf"
+            href="/Agbo_Franklin_Emeka_CV/.pdf"
             download
             className="hidden md:flex items-center gap-2 px-5 py-2 text-sm font-bold text-black bg-yellow-400 hover:bg-yellow-300 rounded-full transition-all duration-200 shadow-md shadow-yellow-400/20 hover:shadow-yellow-400/40"
           >
@@ -148,10 +150,11 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${isOpen
+        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
+          isOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
-          }`}
+        }`}
       >
         {/* Backdrop */}
         <div
@@ -161,8 +164,9 @@ export default function Navbar() {
 
         {/* Drawer panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-72 bg-[#0d0020] border-l border-purple-900/50 flex flex-col pt-24 pb-10 px-6 transition-transform duration-300 shadow-2xl ${isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+          className={`absolute top-0 right-0 h-full w-72 bg-[#0d0020] border-l border-purple-900/50 flex flex-col pt-24 pb-10 px-6 transition-transform duration-300 shadow-2xl ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         >
           {/* Mobile links */}
           <nav className="flex flex-col gap-2 flex-1">
@@ -178,10 +182,11 @@ export default function Navbar() {
                     handleNavClick(href);
                   }}
                   style={{ transitionDelay: isOpen ? `${idx * 40}ms` : "0ms" }}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-all duration-200 ${isActive
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-all duration-200 ${
+                    isActive
                       ? "text-black bg-yellow-400"
                       : "text-gray-300 hover:text-white hover:bg-white/5"
-                    } ${isOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"}`}
+                  } ${isOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"}`}
                 >
                   <span
                     className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-black" : "bg-purple-500"}`}
@@ -222,5 +227,5 @@ export default function Navbar() {
         </div>
       </div>
     </>
-  )
+  );
 }
