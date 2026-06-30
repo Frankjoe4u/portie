@@ -194,7 +194,7 @@ export default function Navbar() {
 
           {/* Mobile CV button */}
           <a
-            href="/CV.pdf"
+            href="/Agbo_Franklin_Emeka_CV.pdf"
             download
             className="flex items-center justify-center gap-2 w-full py-3 text-sm font-bold text-black bg-yellow-400 hover:bg-yellow-300 rounded-full transition-colors duration-200"
           >
