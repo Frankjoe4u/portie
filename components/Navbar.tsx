@@ -108,8 +108,8 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <a
-            href="/Agbo_Franklin_Emeka_CV/.pdf"
-            download
+            href="/Agbo_Franklin_Emeka_CV.pdf"
+            download="Agbo_Franklin_Emeka_CV.pdf"
             className="hidden md:flex items-center gap-2 px-5 py-2 text-sm font-bold text-black bg-yellow-400 hover:bg-yellow-300 rounded-full transition-all duration-200 shadow-md shadow-yellow-400/20 hover:shadow-yellow-400/40"
           >
             <svg
