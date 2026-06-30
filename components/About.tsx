@@ -94,7 +94,7 @@ export default function About() {
               <span className="text-white font-extrabold text-2xl md:text-3xl block mb-3">
                 I am Agbo Franklin Emeka
               </span>
-              a passionate full-stack developer who loves turning ideas into
+              a passionate software developer who loves turning ideas into
               real, working products. From clean pixel-perfect frontends to
               powerful backend APIs, I build things that are fast, scalable and
               beautiful.
