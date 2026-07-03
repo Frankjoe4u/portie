@@ -58,17 +58,14 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="py-20 px-6"
-      style={{
-        background: "linear-gradient(180deg, #0d0020 0%, #1a003e 100%)",
-      }}
+      className="py-20 px-6 bg-[linear-gradient(180deg,#f5f3ff_0%,#ede9fe_100%)] dark:bg-[linear-gradient(180deg,#0d0020_0%,#1a003e_100%)]"
     >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-            Contact <span className="text-yellow-400">Me</span>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+            Contact <span className="text-yellow-500 dark:text-yellow-400">Me</span>
           </h2>
-          <p className="text-gray-400 text-base max-w-xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-400 text-base max-w-xl mx-auto">
             Have a project in mind or want to work together? Feel free to reach
             out and I will get back to you as soon as possible.
           </p>
@@ -79,10 +76,7 @@ export default function Contact() {
           {/* Left: Contact Info */}
           <div className="flex-1 flex flex-col gap-8">
             <div className="flex items-start gap-4">
-              <div
-                className="p-3 rounded-xl text-yellow-400 shrink-0"
-                style={{ background: "rgba(124, 58, 237, 0.2)" }}
-              >
+              <div className="p-3 rounded-xl text-yellow-600 dark:text-yellow-400 shrink-0 bg-purple-200/50 dark:bg-[rgba(124,58,237,0.2)]">
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -98,16 +92,13 @@ export default function Contact() {
                 </svg>
               </div>
               <div>
-                <h4 className="text-white font-semibold mb-1">Email</h4>
-                <p className="text-gray-400 text-sm">frankjoe4u@gmail.com</p>
+                <h4 className="text-gray-900 dark:text-white font-semibold mb-1">Email</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">frankjoe4u@gmail.com</p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div
-                className="p-3 rounded-xl text-yellow-400 shrink-0"
-                style={{ background: "rgba(124, 58, 237, 0.2)" }}
-              >
+              <div className="p-3 rounded-xl text-yellow-600 dark:text-yellow-400 shrink-0 bg-purple-200/50 dark:bg-[rgba(124,58,237,0.2)]">
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -128,16 +119,13 @@ export default function Contact() {
                 </svg>
               </div>
               <div>
-                <h4 className="text-white font-semibold mb-1">Location</h4>
-                <p className="text-gray-400 text-sm">Enugu, Nigeria</p>
+                <h4 className="text-gray-900 dark:text-white font-semibold mb-1">Location</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Enugu, Nigeria</p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div
-                className="p-3 rounded-xl text-yellow-400 shrink-0"
-                style={{ background: "rgba(124, 58, 237, 0.2)" }}
-              >
+              <div className="p-3 rounded-xl text-yellow-600 dark:text-yellow-400 shrink-0 bg-purple-200/50 dark:bg-[rgba(124,58,237,0.2)]">
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -153,21 +141,18 @@ export default function Contact() {
                 </svg>
               </div>
               <div>
-                <h4 className="text-white font-semibold mb-1">GitHub</h4>
-                <p className="text-gray-400 text-sm">github.com/Frankjoe4u</p>
+                <h4 className="text-gray-900 dark:text-white font-semibold mb-1">GitHub</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">github.com/Frankjoe4u</p>
               </div>
             </div>
           </div>
 
           {/* Right: Contact Form */}
-          <div
-            className="flex-1 rounded-2xl p-8 border border-purple-800"
-            style={{ background: "rgba(124, 58, 237, 0.08)" }}
-          >
+          <div className="flex-1 rounded-2xl p-8 border border-purple-300 dark:border-purple-800 bg-purple-100/50 dark:bg-[rgba(124,58,237,0.08)]">
             <div className="flex flex-col gap-5">
               <div className="flex flex-col md:flex-row gap-5">
                 <div className="flex-1 flex flex-col gap-2">
-                  <label className="text-gray-300 text-sm font-medium">
+                  <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
                     Full Name
                   </label>
                   <input
@@ -176,11 +161,11 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your name"
-                    className="bg-transparent border border-purple-700 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-400 transition-colors"
+                    className="bg-transparent border border-purple-400 dark:border-purple-700 rounded-xl px-4 py-3 text-gray-900 dark:text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-400 transition-colors"
                   />
                 </div>
                 <div className="flex-1 flex flex-col gap-2">
-                  <label className="text-gray-300 text-sm font-medium">
+                  <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
                     Email
                   </label>
                   <input
@@ -189,13 +174,13 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Your email"
-                    className="bg-transparent border border-purple-700 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-400 transition-colors"
+                    className="bg-transparent border border-purple-400 dark:border-purple-700 rounded-xl px-4 py-3 text-gray-900 dark:text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-400 transition-colors"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-gray-300 text-sm font-medium">
+                <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
                   Subject
                 </label>
                 <input
@@ -204,12 +189,12 @@ export default function Contact() {
                   value={formData.title}
                   onChange={handleChange}
                   placeholder="Project subject"
-                  className="bg-transparent border border-purple-700 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-400 transition-colors"
+                  className="bg-transparent border border-purple-400 dark:border-purple-700 rounded-xl px-4 py-3 text-gray-900 dark:text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-400 transition-colors"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-gray-300 text-sm font-medium">
+                <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
                   Message
                 </label>
                 <textarea
@@ -218,17 +203,17 @@ export default function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   placeholder="Tell me about your project..."
-                  className="bg-transparent border border-purple-700 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-400 transition-colors resize-none"
+                  className="bg-transparent border border-purple-400 dark:border-purple-700 rounded-xl px-4 py-3 text-gray-900 dark:text-white text-sm placeholder-gray-500 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-400 transition-colors resize-none"
                 />
               </div>
 
               {status === "success" && (
-                <p className="text-green-400 text-sm text-center">
+                <p className="text-green-600 dark:text-green-400 text-sm text-center">
                   Message sent successfully! I will get back to you soon.
                 </p>
               )}
               {status === "error" && (
-                <p className="text-red-400 text-sm text-center">
+                <p className="text-red-600 dark:text-red-400 text-sm text-center">
                   Something went wrong. Please try again.
                 </p>
               )}

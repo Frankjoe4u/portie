@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 
 type Service = {
   id: string;
@@ -139,6 +140,11 @@ export default function Services() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted ? theme === "dark" : true;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -151,6 +157,23 @@ export default function Services() {
     return () => observer.disconnect();
   }, []);
 
+  // ── Theme tokens ──
+  const sectionBg = isDark
+    ? "linear-gradient(180deg, #1a003e 0%, #0d0020 50%, #160040 100%)"
+    : "linear-gradient(180deg, #f5f3ff 0%, #ffffff 50%, #f5f3ff 100%)";
+  const cardBorder = isDark ? "rgba(255,255,255,0.06)" : "rgba(124,58,237,0.14)";
+  const cardBg = isDark ? "rgba(255,255,255,0.018)" : "rgba(124,58,237,0.02)";
+  const cardBgHover = isDark ? "rgba(255,255,255,0.03)" : "rgba(124,58,237,0.05)";
+  const headingColor = isDark ? "#fff" : "#1e1b3a";
+  const subCopyColor = isDark ? "rgba(255,255,255,0.32)" : "rgba(30,27,58,0.5)";
+  const cardTitleColor = isDark ? "#fff" : "#1e1b3a";
+  const cardDescColor = isDark ? "rgba(255,255,255,0.38)" : "rgba(30,27,58,0.55)";
+  const deliverableColor = isDark ? "rgba(255,255,255,0.45)" : "rgba(30,27,58,0.5)";
+  const deliverableHoverColor = isDark ? "rgba(255,255,255,0.58)" : "rgba(30,27,58,0.75)";
+  const idNumberColor = isDark ? "rgba(255,255,255,0.12)" : "rgba(30,27,58,0.15)";
+  const dividerBase = isDark ? "rgba(255,255,255,0.05)" : "rgba(124,58,237,0.15)";
+  const bottomNoteColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(30,27,58,0.25)";
+
   return (
     <section
       id="services"
@@ -159,8 +182,7 @@ export default function Services() {
         position: "relative",
         padding: "100px 24px",
         overflow: "hidden",
-        background:
-          "linear-gradient(180deg, #1a003e 0%, #0d0020 50%, #160040 100%)",
+        background: sectionBg,
       }}
     >
       <style>{`
@@ -182,15 +204,15 @@ export default function Services() {
         .service-card {
           position: relative;
           border-radius: 14px;
-          border: 1px solid rgba(255,255,255,0.06);
-          background: rgba(255,255,255,0.018);
+          border: 1px solid ${cardBorder};
+          background: ${cardBg};
           padding: 28px 28px 24px;
           cursor: default;
           transition: border-color 0.3s, background 0.3s, transform 0.35s;
           overflow: hidden;
         }
         .service-card:hover {
-          background: rgba(255,255,255,0.03);
+          background: ${cardBgHover};
           transform: translateY(-4px);
         }
 
@@ -200,12 +222,12 @@ export default function Services() {
           gap: 9px;
           font-family: 'Fira Code', monospace;
           font-size: 11.5px;
-          color: rgba(255,255,255,0.45);
+          color: ${deliverableColor};
           line-height: 1.55;
           transition: color 0.2s;
         }
         .service-card:hover .deliverable-item {
-          color: rgba(255,255,255,0.58);
+          color: ${deliverableHoverColor};
         }
 
         .cta-row {
@@ -356,7 +378,7 @@ export default function Services() {
               fontWeight: 800,
               fontSize: "clamp(36px, 5vw, 60px)",
               lineHeight: 1.08,
-              color: "#fff",
+              color: headingColor,
               margin: "0 0 16px",
               letterSpacing: "-0.02em",
             }}
@@ -368,7 +390,7 @@ export default function Services() {
             style={{
               fontFamily: "'Fira Code', monospace",
               fontSize: 13,
-              color: "rgba(255,255,255,0.32)",
+              color: subCopyColor,
               maxWidth: 440,
               lineHeight: 1.8,
               margin: "0 auto",
@@ -406,9 +428,7 @@ export default function Services() {
                 onMouseEnter={() => setHoveredId(svc.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 style={{
-                  borderColor: isHovered
-                    ? `${svc.color}40`
-                    : "rgba(255,255,255,0.06)",
+                  borderColor: isHovered ? `${svc.color}40` : cardBorder,
                   opacity: visible ? 1 : 0,
                   transform: visible
                     ? isHovered
@@ -467,7 +487,7 @@ export default function Services() {
                     style={{
                       fontFamily: "'Fira Code', monospace",
                       fontSize: 11,
-                      color: "rgba(255,255,255,0.12)",
+                      color: idNumberColor,
                       letterSpacing: "0.08em",
                       fontWeight: 500,
                     }}
@@ -483,7 +503,7 @@ export default function Services() {
                       fontFamily: "'Syne', sans-serif",
                       fontWeight: 800,
                       fontSize: 15.5,
-                      color: "#fff",
+                      color: cardTitleColor,
                       margin: "0 0 4px",
                       lineHeight: 1.3,
                       letterSpacing: "0.01em",
@@ -512,7 +532,7 @@ export default function Services() {
                   style={{
                     fontFamily: "'Fira Code', monospace",
                     fontSize: 12,
-                    color: "rgba(255,255,255,0.38)",
+                    color: cardDescColor,
                     lineHeight: 1.75,
                     margin: "0 0 18px",
                   }}
@@ -556,10 +576,8 @@ export default function Services() {
 
         {/* ── CTA ── */}
         <div className={`cta-row ${visible ? "visible" : ""}`}>
-          <div
-            style={{ height: 1, flex: 1, background: "rgba(255,255,255,0.05)" }}
-          />
-          <a
+          <div style={{ height: 1, flex: 1, background: dividerBase }} />
+          
             href="https://wa.me/2347066823448"
             target="_blank"
             rel="noopener noreferrer"
@@ -567,9 +585,7 @@ export default function Services() {
           >
             Let's discuss your project ↗
           </a>
-          <div
-            style={{ height: 1, flex: 1, background: "rgba(255,255,255,0.05)" }}
-          />
+          <div style={{ height: 1, flex: 1, background: dividerBase }} />
         </div>
 
         {/* Bottom note */}
@@ -579,7 +595,7 @@ export default function Services() {
             marginTop: 28,
             fontFamily: "'Fira Code', monospace",
             fontSize: 11,
-            color: "rgba(255,255,255,0.15)",
+            color: bottomNoteColor,
             letterSpacing: "0.06em",
             opacity: visible ? 1 : 0,
             transition: "opacity 0.6s ease 900ms",

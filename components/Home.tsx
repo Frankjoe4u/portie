@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const FILE_TABS = ["role.ts", "stack.json", "contact.ts"];
 
-const CODE_BLOCKS: Record<
+const CODE_BLOCKS: Record
   string,
   {
     lines: {
@@ -122,6 +123,11 @@ export default function Home() {
   const [currentLineIdx, setCurrentLineIdx] = useState(0);
   const [cursorOn, setCursorOn] = useState(true);
   const [time, setTime] = useState("");
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted ? theme === "dark" : true;
 
   useEffect(() => {
     const tick = () =>
@@ -222,14 +228,19 @@ export default function Home() {
 
   const lines = CODE_BLOCKS[FILE_TABS[activeTab]].lines;
 
+  const mainBg = isDark
+    ? "linear-gradient(135deg,#0a001f 0%,#160040 50%,#0a0020 100%)"
+    : "linear-gradient(135deg,#f5f3ff 0%,#ede9fe 50%,#f8fafc 100%)";
+  const headlineColor = isDark ? "#e2e8f0" : "#1e1b3a";
+  const bodyColor = isDark ? "#94a3b8" : "#4b5563";
+  const microLabelColor = isDark ? "#c4b5fd" : "#7c3aed";
+  const statLabelColor = isDark ? "#64748b" : "#6b7280";
+
   return (
     <main
       id="home"
       className="relative overflow-hidden flex flex-col items-center justify-start pt-20 pb-16"
-      style={{
-        background:
-          "linear-gradient(135deg,#0a001f 0%,#160040 50%,#0a0020 100%)",
-      }}
+      style={{ background: mainBg }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Syne:wght@700;800&display=swap');
@@ -334,8 +345,12 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Star canvas */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0" />
+      {/* Star canvas — fades out in light mode */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full z-0 transition-opacity duration-300"
+        style={{ opacity: isDark ? 1 : 0 }}
+      />
 
       {/* Nebula blobs */}
       <div
@@ -377,7 +392,7 @@ export default function Home() {
               fontFamily: "'Fira Code', monospace",
               fontSize: 12,
               letterSpacing: "0.2em",
-              color: "#c4b5fd",
+              color: microLabelColor,
               marginBottom: 20,
               opacity: 0.8,
               animation: "fadeSlideUp 0.6s ease 0.1s both",
@@ -393,7 +408,7 @@ export default function Home() {
               lineHeight: 1.1,
               fontSize: "clamp(34px, 4.8vw, 60px)",
               marginBottom: 18,
-              color: "#e2e8f0",
+              color: headlineColor,
               animation: "fadeSlideUp 0.7s ease 0.2s both",
             }}
           >
@@ -416,7 +431,7 @@ export default function Home() {
           <p
             style={{
               fontFamily: "'Fira Code', monospace",
-              color: "#94a3b8",
+              color: bodyColor,
               fontSize: 13.5,
               lineHeight: 1.9,
               animation: "fadeSlideUp 0.7s ease 0.35s both",
@@ -425,7 +440,7 @@ export default function Home() {
           >
             Whether it's your first product or your tenth — I help bring it to
             life with clean code, thoughtful design, and a{" "}
-            <span style={{ color: "#fde68a" }}>
+            <span style={{ color: "#f59e0b" }}>
               genuine care for the end result.
             </span>
           </p>
@@ -435,7 +450,7 @@ export default function Home() {
             className="flex flex-wrap gap-4 mb-7"
             style={{ animation: "fadeSlideUp 0.7s ease 0.5s both" }}
           >
-            <a
+            
               href="https://wa.me/2347066823448"
               target="_blank"
               rel="noopener noreferrer"
@@ -493,7 +508,7 @@ export default function Home() {
                     fontFamily: "'Syne', sans-serif",
                     fontWeight: 800,
                     fontSize: 22,
-                    color: "#fde68a",
+                    color: "#f59e0b",
                     lineHeight: 1,
                     marginBottom: 3,
                   }}
@@ -504,7 +519,7 @@ export default function Home() {
                   style={{
                     fontFamily: "'Fira Code', monospace",
                     fontSize: 10,
-                    color: "#64748b",
+                    color: statLabelColor,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
                   }}
@@ -516,7 +531,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── RIGHT — IDE Editor ── */}
+        {/* ── RIGHT — IDE Editor (always dark, like a real code editor) ── */}
         <div
           className="flex-1 flex justify-center items-center"
           style={{

@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
- 
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,11 +54,15 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col"><AuthProvider>{children}</AuthProvider></body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
+      </body>
       <Analytics />
       <SpeedInsights />
     </html>
   );
 }
-
