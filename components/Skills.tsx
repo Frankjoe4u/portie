@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 
 type Skill = {
   name: string;
@@ -78,9 +79,18 @@ const techStack: {
   { label: "CSS", weight: "tertiary" },
 ];
 
-function ProficiencyDots({ level, color }: { level: number; color: string }) {
+function ProficiencyDots({
+  level,
+  color,
+  isDark,
+}: {
+  level: number;
+  color: string;
+  isDark: boolean;
+}) {
   const total = 5;
   const filled = Math.round((level / 100) * total);
+  const emptyColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(30,27,58,0.12)";
   return (
     <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
       {Array.from({ length: total }).map((_, i) => (
@@ -90,7 +100,7 @@ function ProficiencyDots({ level, color }: { level: number; color: string }) {
             width: i < filled ? 8 : 6,
             height: i < filled ? 8 : 6,
             borderRadius: "50%",
-            background: i < filled ? color : "rgba(255,255,255,0.08)",
+            background: i < filled ? color : emptyColor,
             boxShadow: i < filled ? `0 0 6px ${color}88` : "none",
             display: "inline-block",
             transition: "all 0.3s ease",
@@ -106,12 +116,17 @@ function SkillRow({
   color,
   visible,
   index,
+  isDark,
 }: {
   skill: Skill;
   color: string;
   visible: boolean;
   index: number;
+  isDark: boolean;
 }) {
+  const rowBorder = isDark ? "rgba(255,255,255,0.04)" : "rgba(30,27,58,0.06)";
+  const nameColor = isDark ? "#d1d5db" : "#374151";
+  const levelColor = isDark ? "rgba(255,255,255,0.25)" : "rgba(30,27,58,0.35)";
   return (
     <div
       style={{
@@ -119,7 +134,7 @@ function SkillRow({
         alignItems: "center",
         justifyContent: "space-between",
         padding: "10px 0",
-        borderBottom: "1px solid rgba(255,255,255,0.04)",
+        borderBottom: `1px solid ${rowBorder}`,
         opacity: visible ? 1 : 0,
         transform: visible ? "translateX(0)" : "translateX(-12px)",
         transition: `opacity 0.5s ease ${index * 80 + 200}ms, transform 0.5s ease ${index * 80 + 200}ms`,
@@ -150,7 +165,7 @@ function SkillRow({
             fontFamily: "'Syne', sans-serif",
             fontWeight: 600,
             fontSize: 13.5,
-            color: "#d1d5db",
+            color: nameColor,
             letterSpacing: "0.01em",
           }}
         >
@@ -162,13 +177,13 @@ function SkillRow({
           style={{
             fontFamily: "'Fira Code', monospace",
             fontSize: 10,
-            color: "rgba(255,255,255,0.25)",
+            color: levelColor,
             letterSpacing: "0.05em",
           }}
         >
           {skill.level}%
         </span>
-        <ProficiencyDots level={skill.level} color={color} />
+        <ProficiencyDots level={skill.level} color={color} isDark={isDark} />
       </div>
     </div>
   );
@@ -177,6 +192,11 @@ function SkillRow({
 export default function Skills() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted ? theme === "dark" : true;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -189,6 +209,25 @@ export default function Skills() {
     return () => observer.disconnect();
   }, []);
 
+  // ── Theme tokens ──
+  const sectionBg = isDark
+    ? "linear-gradient(180deg, #0d0020 0%, #1a003e 50%, #0d0020 100%)"
+    : "linear-gradient(180deg, #f8fafc 0%, #f5f3ff 50%, #f8fafc 100%)";
+  const cardBg = isDark ? "rgba(255,255,255,0.018)" : "rgba(124,58,237,0.025)";
+  const cardBgHover = isDark ? "rgba(255,255,255,0.028)" : "rgba(124,58,237,0.05)";
+  const cardBorder = isDark ? "rgba(255,255,255,0.06)" : "rgba(124,58,237,0.14)";
+  const cardBorderHover = isDark ? "rgba(255,255,255,0.1)" : "rgba(124,58,237,0.28)";
+  const headingColor = isDark ? "#fff" : "#1e1b3a";
+  const subCopyColor = isDark ? "rgba(255,255,255,0.35)" : "rgba(30,27,58,0.5)";
+  const dividerColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(124,58,237,0.15)";
+  const stackLabelColor = isDark ? "rgba(255,255,255,0.2)" : "rgba(30,27,58,0.3)";
+  const bottomNoteColor = isDark ? "rgba(255,255,255,0.18)" : "rgba(30,27,58,0.28)";
+  const tertiaryTextColor = isDark ? "rgba(255,255,255,0.3)" : "rgba(30,27,58,0.4)";
+  const tertiaryBg = isDark ? "rgba(255,255,255,0.03)" : "rgba(30,27,58,0.03)";
+  const tertiaryBorder = isDark ? "rgba(255,255,255,0.07)" : "rgba(30,27,58,0.1)";
+  const tertiaryHoverText = isDark ? "rgba(255,255,255,0.55)" : "rgba(30,27,58,0.65)";
+  const tertiaryHoverBorder = isDark ? "rgba(255,255,255,0.15)" : "rgba(30,27,58,0.2)";
+
   return (
     <section
       id="skills"
@@ -197,8 +236,7 @@ export default function Skills() {
         position: "relative",
         padding: "96px 24px",
         overflow: "hidden",
-        background:
-          "linear-gradient(180deg, #0d0020 0%, #1a003e 50%, #0d0020 100%)",
+        background: sectionBg,
       }}
     >
       <style>{`
@@ -214,9 +252,9 @@ export default function Skills() {
         }
 
         .skill-card {
-          background: rgba(255,255,255,0.018);
+          background: ${cardBg};
           border-radius: 16px;
-          border: 1px solid rgba(255,255,255,0.06);
+          border: 1px solid ${cardBorder};
           padding: 28px;
           transition: border-color 0.3s, background 0.3s, transform 0.3s;
           position: relative;
@@ -232,8 +270,8 @@ export default function Skills() {
           pointer-events: none;
         }
         .skill-card:hover {
-          border-color: rgba(255,255,255,0.1);
-          background: rgba(255,255,255,0.028);
+          border-color: ${cardBorderHover};
+          background: ${cardBgHover};
           transform: translateY(-3px);
         }
 
@@ -241,52 +279,52 @@ export default function Skills() {
           font-family: 'Fira Code', monospace;
           font-size: 12px; font-weight: 500;
           padding: 7px 16px; border-radius: 6px;
-          color: #fde68a;
-          background: rgba(250,204,21,0.08);
-          border: 1px solid rgba(250,204,21,0.25);
+          color: #d97706;
+          background: rgba(250,204,21,0.1);
+          border: 1px solid rgba(250,204,21,0.3);
           cursor: default;
           transition: all 0.2s;
           white-space: nowrap;
         }
         .tag-primary:hover {
-          background: rgba(250,204,21,0.15);
-          border-color: rgba(250,204,21,0.5);
+          background: rgba(250,204,21,0.18);
+          border-color: rgba(250,204,21,0.55);
         }
         .tag-secondary {
           font-family: 'Fira Code', monospace;
           font-size: 11.5px; font-weight: 400;
           padding: 6px 14px; border-radius: 6px;
-          color: #a78bfa;
-          background: rgba(167,139,250,0.06);
-          border: 1px solid rgba(167,139,250,0.18);
+          color: #7c3aed;
+          background: rgba(167,139,250,0.08);
+          border: 1px solid rgba(167,139,250,0.22);
           cursor: default;
           transition: all 0.2s;
           white-space: nowrap;
         }
         .tag-secondary:hover {
-          background: rgba(167,139,250,0.12);
-          border-color: rgba(167,139,250,0.4);
+          background: rgba(167,139,250,0.15);
+          border-color: rgba(167,139,250,0.45);
         }
         .tag-tertiary {
           font-family: 'Fira Code', monospace;
           font-size: 11px; font-weight: 400;
           padding: 5px 12px; border-radius: 6px;
-          color: rgba(255,255,255,0.3);
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.07);
+          color: ${tertiaryTextColor};
+          background: ${tertiaryBg};
+          border: 1px solid ${tertiaryBorder};
           cursor: default;
           transition: all 0.2s;
           white-space: nowrap;
         }
         .tag-tertiary:hover {
-          color: rgba(255,255,255,0.55);
-          border-color: rgba(255,255,255,0.15);
+          color: ${tertiaryHoverText};
+          border-color: ${tertiaryHoverBorder};
         }
 
         .divider-line {
           width: 1px;
           height: 40px;
-          background: linear-gradient(180deg, transparent, rgba(255,255,255,0.12), transparent);
+          background: linear-gradient(180deg, transparent, ${isDark ? "rgba(255,255,255,0.12)" : "rgba(30,27,58,0.18)"}, transparent);
         }
       `}</style>
 
@@ -371,7 +409,7 @@ export default function Skills() {
               style={{
                 fontFamily: "'Fira Code', monospace",
                 fontSize: 11,
-                color: "#facc15",
+                color: "#d97706",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
               }}
@@ -395,18 +433,18 @@ export default function Skills() {
                 fontWeight: 800,
                 fontSize: "clamp(32px, 4vw, 52px)",
                 lineHeight: 1.1,
-                color: "#fff",
+                color: headingColor,
                 margin: 0,
               }}
             >
               Built to ship.{" "}
-              <span style={{ color: "#facc15" }}>End to end.</span>
+              <span style={{ color: "#d97706" }}>End to end.</span>
             </h2>
             <p
               style={{
                 fontFamily: "'Fira Code', monospace",
                 fontSize: 13,
-                color: "rgba(255,255,255,0.35)",
+                color: subCopyColor,
                 maxWidth: 320,
                 lineHeight: 1.7,
                 margin: 0,
@@ -485,7 +523,7 @@ export default function Skills() {
                       fontFamily: "'Syne', sans-serif",
                       fontWeight: 800,
                       fontSize: 16,
-                      color: "#fff",
+                      color: headingColor,
                       margin: 0,
                       letterSpacing: "0.02em",
                     }}
@@ -498,7 +536,7 @@ export default function Skills() {
                     fontFamily: "'Fira Code', monospace",
                     fontSize: 11,
                     color: cat.color,
-                    opacity: 0.6,
+                    opacity: isDark ? 0.6 : 0.85,
                     margin: 0,
                     paddingLeft: 13,
                     letterSpacing: "0.05em",
@@ -517,6 +555,7 @@ export default function Skills() {
                     color={cat.color}
                     visible={visible}
                     index={ci * 4 + si}
+                    isDark={isDark}
                   />
                 ))}
               </div>
@@ -535,14 +574,12 @@ export default function Skills() {
             transition: "opacity 0.6s ease 500ms",
           }}
         >
-          <div
-            style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }}
-          />
+          <div style={{ flex: 1, height: 1, background: dividerColor }} />
           <span
             style={{
               fontFamily: "'Fira Code', monospace",
               fontSize: 10,
-              color: "rgba(255,255,255,0.2)",
+              color: stackLabelColor,
               letterSpacing: "0.2em",
               textTransform: "uppercase",
               whiteSpace: "nowrap",
@@ -550,9 +587,7 @@ export default function Skills() {
           >
             full tech stack
           </span>
-          <div
-            style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }}
-          />
+          <div style={{ flex: 1, height: 1, background: dividerColor }} />
         </div>
 
         {/* ── Tech stack tags ── */}
@@ -587,7 +622,7 @@ export default function Skills() {
             style={{
               fontFamily: "'Fira Code', monospace",
               fontSize: 11,
-              color: "rgba(255,255,255,0.18)",
+              color: bottomNoteColor,
               letterSpacing: "0.08em",
             }}
           >
