@@ -19,25 +19,25 @@ export default function Footer() {
         </div>
 
         <div className="flex items-center gap-6">
-          
+          <a
             href="#"
             className="text-gray-600 dark:text-gray-400 text-sm hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
           >
             Home
           </a>
-          
+          <a
             href="#services"
             className="text-gray-600 dark:text-gray-400 text-sm hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
           >
             Services
           </a>
-          
+          <a
             href="#projects"
             className="text-gray-600 dark:text-gray-400 text-sm hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
           >
             Projects
           </a>
-          
+          <a
             href="#contact"
             className="text-gray-600 dark:text-gray-400 text-sm hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
           >
@@ -62,7 +62,7 @@ export default function Footer() {
           </button>
 
           {/* Email — mailto already opens mail app natively */}
-          
+          <a
             href="mailto:frankjoe4u@gmail.com"
             className="text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
           >
@@ -113,73 +113,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Projects Section */}
       <div className="max-w-6xl mx-auto mt-8 pt-6 border-t border-purple-200 dark:border-[rgba(124,58,237,0.15)]">
-        <h4 className="text-gray-600 dark:text-gray-400 text-xs font-semibold uppercase tracking-widest mb-4 text-center md:text-left"></h4>
-
-        {/*
-          Featured Projects
-        </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {[
-            {
-              name: "Project One",
-              desc: "A full-stack web application",
-              href: "#",
-            },
-            {
-              name: "Project Two",
-              desc: "REST API with Node.js & MongoDB",
-              href: "#",
-            },
-            { name: "Project Three", desc: "React dashboard UI", href: "#" },
-          ].map((project) => (
-            
-              key={project.name}
-              href={project.href}
-              className="group flex items-center justify-between px-4 py-3 rounded-lg transition-colors"
-              style={{
-                background: "rgba(124, 58, 237, 0.07)",
-                border: "1px solid rgba(124, 58, 237, 0.15)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(124, 58, 237, 0.15)";
-                e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(124, 58, 237, 0.07)";
-                e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.15)";
-              }}
-            >
-              <div>
-                <p className="text-white text-sm font-semibold group-hover:text-yellow-400 transition-colors">
-                  {project.name}
-                </p>
-                <p className="text-gray-500 text-xs mt-0.5">{project.desc}</p>
-              </div>
-              <svg
-                className="w-4 h-4 text-gray-600 group-hover:text-yellow-400 transition-colors shrink-0 ml-2"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div
-        className="max-w-6xl mx-auto mt-8 pt-6"
-        style={{ borderTop: "1px solid rgba(124, 58, 237, 0.15)" }}
-      >
-       */}
         <p className="text-center text-gray-500 dark:text-gray-600 text-sm">
           2026 Frank Joe. All rights reserved.
         </p>
