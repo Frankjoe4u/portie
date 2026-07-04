@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   title: "frankjoe",
   description: "my portfolio website",
   openGraph: {
-    title: "Frank Joe | Full Stack Developer",
+    title: "Frank Joe | Software Developer",
     description:
-      "Full stack developer building modern web experiences with Next.js, TypeScript, and Tailwind CSS.",
+      "Software developer building modern web experiences with Next.js, TypeScript, and Tailwind CSS.",
     url: "https://fjoe.vercel.app",
     siteName: "Frank Joe",
     images: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
         url: "https://fjoe.vercel.app/pix1.jpg",
         width: 1200,
         height: 630,
-        alt: "Frank Joe | Full Stack Developer",
+        alt: "Frank Joe | Software Developer",
       },
     ],
     locale: "en_US",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Frank Joe | Full Stack Developer",
+    title: "Frank Joe | Software Developer",
     description:
-      "Full stack developer building modern web experiences with Next.js, TypeScript, and Tailwind CSS.",
+      "Software developer building modern web experiences with Next.js, TypeScript, and Tailwind CSS.",
     images: ["https://fjoe.vercel.app/pix1.jpg"],
   },
 };
@@ -57,7 +57,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </body>
