@@ -250,7 +250,7 @@ export default function ProjectsClient({
 
                 {i === active && (
                   <div style={{ display: "flex", gap: 8 }}>
-                      
+                    <a
                       href={p.live}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -266,7 +266,7 @@ export default function ProjectsClient({
                     >
                       Live
                     </a>
-                      
+                    <a
                       href={p.github}
                       target="_blank"
                       rel="noopener noreferrer"

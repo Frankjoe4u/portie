@@ -1,3 +1,4 @@
+
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
@@ -6,7 +7,7 @@ import { useTheme } from "next-themes";
 
 const FILE_TABS = ["role.ts", "stack.json", "contact.ts"];
 
-const CODE_BLOCKS: Record
+const CODE_BLOCKS: Record<
   string,
   {
     lines: {
@@ -450,7 +451,7 @@ export default function Home() {
             className="flex flex-wrap gap-4 mb-7"
             style={{ animation: "fadeSlideUp 0.7s ease 0.5s both" }}
           >
-            
+            <a
               href="https://wa.me/2347066823448"
               target="_blank"
               rel="noopener noreferrer"

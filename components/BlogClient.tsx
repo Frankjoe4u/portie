@@ -162,7 +162,7 @@ export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
               <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-6">
                 {featured.excerpt}
               </p>
-              
+              <a
                 href={`/blog/${featured.slug}`}
                 className="inline-flex items-center gap-2 text-sm font-bold text-black px-5 py-2.5 rounded-full transition-all duration-200"
                 style={{ background: featured.tagColor }}
@@ -229,7 +229,7 @@ export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
                   <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">
                     {post.excerpt}
                   </p>
-                    
+                  <a
                     href={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors duration-200"
                     style={{ color: post.tagColor }}
@@ -261,7 +261,7 @@ export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
           <p className="text-gray-500 text-sm mb-4">
             More articles on the way , follow along to stay updated.
           </p>
-          
+          <a
             href="https://github.com/Frankjoe4u"
             target="_blank"
             rel="noopener noreferrer"

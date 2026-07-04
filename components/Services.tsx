@@ -577,7 +577,7 @@ export default function Services() {
         {/* ── CTA ── */}
         <div className={`cta-row ${visible ? "visible" : ""}`}>
           <div style={{ height: 1, flex: 1, background: dividerBase }} />
-          
+          <a
             href="https://wa.me/2347066823448"
             target="_blank"
             rel="noopener noreferrer"

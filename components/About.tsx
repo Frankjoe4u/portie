@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -151,7 +152,7 @@ export default function About() {
 
             {/* Buttons */}
             <div className="flex flex-wrap gap-4">
-              
+              <a
                 href="#contact"
                 onClick={(e) => {
                   e.preventDefault();
@@ -163,7 +164,7 @@ export default function About() {
               >
                 Start Your Project <span>→</span>
               </a>
-              
+              <a
                 href="#projects"
                 onClick={(e) => {
                   e.preventDefault();

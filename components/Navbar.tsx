@@ -88,7 +88,7 @@ export default function Navbar() {
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          
+          <a
             href="#home"
             onClick={(e) => {
               e.preventDefault();
@@ -113,7 +113,7 @@ export default function Navbar() {
               const sectionId = href.replace("#", "");
               const isActive = activeSection === sectionId;
               return (
-                
+                <a
                   key={label}
                   href={href}
                   onClick={(e) => {
@@ -135,7 +135,7 @@ export default function Navbar() {
           {/* Desktop CTA + toggle */}
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            
+            <a
               href="/Agbo_Franklin_Emeka_CV.pdf"
               download="Agbo_Franklin_Emeka_CV.pdf"
               className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-black bg-yellow-400 hover:bg-yellow-300 rounded-full transition-all duration-200 shadow-md shadow-yellow-400/20 hover:shadow-yellow-400/40"
@@ -206,7 +206,7 @@ export default function Navbar() {
               const sectionId = href.replace("#", "");
               const isActive = activeSection === sectionId;
               return (
-                
+                <a
                   key={label}
                   href={href}
                   onClick={(e) => {
@@ -230,7 +230,7 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile CV button */}
-          
+          <a
             href="/Agbo_Franklin_Emeka_CV.pdf"
             download
             className="flex items-center justify-center gap-2 w-full py-3 text-sm font-bold text-black bg-yellow-400 hover:bg-yellow-300 rounded-full transition-colors duration-200"
