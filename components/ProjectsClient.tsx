@@ -28,17 +28,17 @@ export default function ProjectsClient({
   // ── Theme tokens ──
   const sectionBg = isDark
     ? "linear-gradient(180deg, #0d0020 0%, #1a003e 100%)"
-    : "linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%)";
-  const headingColor = isDark ? "text-white" : "text-gray-900";
-  const subCopyColor = isDark ? "text-gray-400" : "text-gray-600";
+    : "linear-gradient(180deg, #eaf6fd 0%, #ffffff 100%)";
+  const headingColor = isDark ? "text-white" : "text-sky-950";
+  const subCopyColor = isDark ? "text-gray-400" : "text-sky-800/70";
   const cardBg = isDark ? "rgba(13, 0, 32, 0.95)" : "rgba(255, 255, 255, 0.97)";
-  const cardBorderIdle = isDark ? "rgba(124,58,237,0.3)" : "rgba(124,58,237,0.2)";
-  const cardTitleColor = isDark ? "#fff" : "#1e1b3a";
-  const idNumberColor = isDark ? "rgba(255,255,255,0.04)" : "rgba(30,27,58,0.06)";
-  const navBtnBg = isDark ? "rgba(255,255,255,0.08)" : "rgba(124,58,237,0.08)";
-  const navBtnBorder = isDark ? "rgba(255,255,255,0.15)" : "rgba(124,58,237,0.2)";
-  const navBtnColor = isDark ? "#fff" : "#4c1d95";
-  const dotInactive = isDark ? "rgba(255,255,255,0.2)" : "rgba(124,58,237,0.2)";
+  const cardBorderIdle = isDark ? "rgba(124,58,237,0.3)" : "rgba(14,159,214,0.25)";
+  const cardTitleColor = isDark ? "#fff" : "#0c3a5c";
+  const idNumberColor = isDark ? "rgba(255,255,255,0.04)" : "rgba(12,58,92,0.07)";
+  const navBtnBg = isDark ? "rgba(255,255,255,0.08)" : "rgba(14,159,214,0.1)";
+  const navBtnBorder = isDark ? "rgba(255,255,255,0.15)" : "rgba(14,159,214,0.25)";
+  const navBtnColor = isDark ? "#fff" : "#0c6a94";
+  const dotInactive = isDark ? "rgba(255,255,255,0.2)" : "rgba(14,159,214,0.2)";
   const gradientOverlay = isDark
     ? "linear-gradient(to bottom, transparent 60%, rgba(13,0,32,0.9) 100%)"
     : "linear-gradient(to bottom, transparent 60%, rgba(255,255,255,0.92) 100%)";

@@ -37,16 +37,16 @@ export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
   // ── Theme tokens ──
   const sectionBg = isDark
     ? "linear-gradient(180deg, #0d0020 0%, #1a003e 100%)"
-    : "linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%)";
+    : "linear-gradient(180deg, #eaf6fd 0%, #ffffff 100%)";
   const featuredCardBg = isDark
     ? "linear-gradient(160deg, rgba(124,58,237,0.12), rgba(13,0,32,0.98))"
-    : "linear-gradient(160deg, rgba(124,58,237,0.08), rgba(255,255,255,0.98))";
-  const restCardBg = isDark ? "rgba(255,255,255,0.02)" : "rgba(124,58,237,0.03)";
+    : "linear-gradient(160deg, rgba(14,159,214,0.08), rgba(255,255,255,0.98))";
+  const restCardBg = isDark ? "rgba(255,255,255,0.02)" : "rgba(14,159,214,0.04)";
   const overlayGradient = isDark
     ? "linear-gradient(to top, rgba(13,0,32,0.75) 35%, rgba(13,0,32,0.1) 100%)"
     : "linear-gradient(to top, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.15) 100%)";
-  const idNumberColor = isDark ? "rgba(250,204,21,0.04)" : "rgba(124,58,237,0.06)";
-  const restIdNumberColor = isDark ? "rgba(255,255,255,0.03)" : "rgba(30,27,58,0.04)";
+  const idNumberColor = isDark ? "rgba(250,204,21,0.04)" : "rgba(14,159,214,0.08)";
+  const restIdNumberColor = isDark ? "rgba(255,255,255,0.03)" : "rgba(12,58,92,0.05)";
 
   if (posts.length === 0) {
     return (
@@ -79,11 +79,11 @@ export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
     >
       <div
         className="absolute bottom-0 left-0 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, #facc15, transparent)" }}
+        style={{ background: isDark ? "radial-gradient(circle, #facc15, transparent)" : "radial-gradient(circle, #38bdf8, transparent)" }}
       />
       <div
         className="absolute top-20 right-0 w-64 h-64 blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, #7c3aed, transparent)" }}
+        style={{ background: isDark ? "radial-gradient(circle, #7c3aed, transparent)" : "radial-gradient(circle, #0ea5e9, transparent)" }}
       />
 
       <div className="max-w-6xl mx-auto">

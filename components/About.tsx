@@ -1,10 +1,9 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 
 const stats = [
-  { value: "2+", label: "Years Experience" },
+  { value: "3+", label: "Years Experience" },
   { value: "10+", label: "Projects Built" },
   { value: "5+", label: "Happy Clients" },
   { value: "3", label: "Mobile Apps" },
@@ -29,19 +28,19 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-24 px-6 overflow-hidden bg-[linear-gradient(180deg,#f5f3ff_0%,#ffffff_100%)] dark:bg-[linear-gradient(180deg,#1a003e_0%,#0d0020_100%)]"
+      className="relative py-24 px-6 overflow-hidden bg-[linear-gradient(180deg,#eaf6fd_0%,#ffffff_100%)] dark:bg-[linear-gradient(180deg,#1a003e_0%,#0d0020_100%)]"
     >
       {/* Background glows */}
-      <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-10 blur-3xl pointer-events-none bg-[radial-gradient(circle,#facc15,transparent)]" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none bg-[radial-gradient(circle,#7c3aed,transparent)]" />
+      <div className="absolute top-0 left-0 w-72 h-72 rounded-full opacity-10 blur-3xl pointer-events-none bg-[radial-gradient(circle,#38bdf8,transparent)] dark:bg-[radial-gradient(circle,#facc15,transparent)]" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none bg-[radial-gradient(circle,#0ea5e9,transparent)] dark:bg-[radial-gradient(circle,#7c3aed,transparent)]" />
 
       <div className="max-w-6xl mx-auto">
         {/* Section Title */}
         <div className="text-center mb-12">
-          <h2 className="text-yellow-500 dark:text-yellow-400 text-5xl font-semibold tracking-wider mb-2">
+          <h2 className="text-sky-600 dark:text-yellow-400 text-5xl font-semibold tracking-wider mb-2">
             ABOUT ME
           </h2>
-          <div className="w-20 h-0.5 bg-yellow-400/50 mx-auto"></div>
+          <div className="w-20 h-0.5 bg-sky-400/50 dark:bg-yellow-400/50 mx-auto"></div>
         </div>
 
         {/* ── DESKTOP: Image LEFT + Content RIGHT ── */}
@@ -60,7 +59,7 @@ export default function About() {
               {Array.from({ length: 25 }).map((_, i) => (
                 <span
                   key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-yellow-400 block"
+                  className="w-1.5 h-1.5 rounded-full bg-sky-400 dark:bg-yellow-400 block"
                 />
               ))}
             </div>
@@ -80,7 +79,7 @@ export default function About() {
                   t.src = "https://placehold.co/400x500/1a003e/facc15?text=FJ";
                 }}
               />
-              <div className="absolute inset-0 bg-linear-to-t from-purple-950/50 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-sky-900/30 dark:from-purple-950/50 to-transparent" />
             </div>
           </div>
 
@@ -102,11 +101,11 @@ export default function About() {
             </p>
             <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
               I work primarily with{" "}
-              <span className="text-yellow-600 dark:text-yellow-400 font-semibold">
+              <span className="text-sky-600 dark:text-yellow-400 font-semibold">
                 Next.js, TypeScript and Tailwind CSS
               </span>{" "}
               on the frontend, and{" "}
-              <span className="text-yellow-600 dark:text-yellow-400 font-semibold">
+              <span className="text-sky-600 dark:text-yellow-400 font-semibold">
                 Node.js, Express and PostgreSQL
               </span>{" "}
               on the backend. When I am not coding, I am exploring Igbo culture
@@ -126,7 +125,7 @@ export default function About() {
                 {Array.from({ length: 25 }).map((_, i) => (
                   <span
                     key={i}
-                    className="w-1.5 h-1.5 rounded-full bg-yellow-400 block"
+                    className="w-1.5 h-1.5 rounded-full bg-sky-400 dark:bg-yellow-400 block"
                   />
                 ))}
               </div>
@@ -146,7 +145,7 @@ export default function About() {
                       "https://placehold.co/400x500/1a003e/facc15?text=FJ";
                   }}
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-purple-950/50 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-sky-900/30 dark:from-purple-950/50 to-transparent" />
               </div>
             </div>
 
@@ -160,7 +159,7 @@ export default function About() {
                     .querySelector("#contact")
                     ?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="px-6 py-3 rounded-full bg-yellow-400 hover:bg-yellow-300 text-black text-sm font-bold transition-all duration-200 shadow-md shadow-yellow-400/20 hover:shadow-yellow-400/40 flex items-center gap-2"
+                className="px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-white dark:bg-yellow-400 dark:hover:bg-yellow-300 dark:text-black text-sm font-bold transition-all duration-200 shadow-md shadow-sky-500/20 hover:shadow-sky-500/40 dark:shadow-yellow-400/20 dark:hover:shadow-yellow-400/40 flex items-center gap-2"
               >
                 Start Your Project <span>→</span>
               </a>
@@ -172,7 +171,7 @@ export default function About() {
                     .querySelector("#projects")
                     ?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="px-6 py-3 rounded-full border border-yellow-500/50 dark:border-yellow-400/50 hover:border-yellow-500 dark:hover:border-yellow-400 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-400/10 text-sm font-bold transition-all duration-200 tracking-widest"
+                className="px-6 py-3 rounded-full border border-sky-500/50 dark:border-yellow-400/50 hover:border-sky-500 dark:hover:border-yellow-400 text-sky-600 dark:text-yellow-400 hover:bg-sky-400/10 dark:hover:bg-yellow-400/10 text-sm font-bold transition-all duration-200 tracking-widest"
               >
                 LEARN MORE
               </a>
@@ -189,10 +188,10 @@ export default function About() {
           {stats.map((s, i) => (
             <div
               key={i}
-              className="relative text-center p-5 rounded-2xl border border-purple-300/40 dark:border-purple-800/30 hover:border-yellow-500/40 dark:hover:border-yellow-400/40 transition-all duration-300 group overflow-hidden bg-purple-50 dark:bg-[rgba(124,58,237,0.05)]"
+              className="relative text-center p-5 rounded-2xl border border-sky-200 dark:border-purple-800/30 hover:border-sky-400 dark:hover:border-yellow-400/40 transition-all duration-300 group overflow-hidden bg-sky-50 dark:bg-[rgba(124,58,237,0.05)]"
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.06),transparent)]" />
-              <p className="text-3xl md:text-4xl font-black text-yellow-600 dark:text-yellow-400 mb-1">
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(14,165,233,0.08),transparent)] dark:bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.06),transparent)]" />
+              <p className="text-3xl md:text-4xl font-black text-sky-600 dark:text-yellow-400 mb-1">
                 {s.value}
               </p>
               <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">{s.label}</p>

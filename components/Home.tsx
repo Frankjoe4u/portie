@@ -1,4 +1,3 @@
-
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
@@ -231,11 +230,11 @@ export default function Home() {
 
   const mainBg = isDark
     ? "linear-gradient(135deg,#0a001f 0%,#160040 50%,#0a0020 100%)"
-    : "linear-gradient(135deg,#f5f3ff 0%,#ede9fe 50%,#f8fafc 100%)";
-  const headlineColor = isDark ? "#e2e8f0" : "#1e1b3a";
-  const bodyColor = isDark ? "#94a3b8" : "#4b5563";
-  const microLabelColor = isDark ? "#c4b5fd" : "#7c3aed";
-  const statLabelColor = isDark ? "#64748b" : "#6b7280";
+    : "linear-gradient(135deg,#eaf6fd 0%,#dff3fc 50%,#f8fdff 100%)";
+  const headlineColor = isDark ? "#e2e8f0" : "#0c3a5c";
+  const bodyColor = isDark ? "#94a3b8" : "#3d6b85";
+  const microLabelColor = isDark ? "#c4b5fd" : "#0e9fd6";
+  const statLabelColor = isDark ? "#64748b" : "#5b8299";
 
   return (
     <main
@@ -304,6 +303,10 @@ export default function Home() {
           background:rgba(124,58,237,0.1); white-space:nowrap;
           backdrop-filter:blur(8px);
         }
+        .skill-pill.light {
+          color:#0c6a94; border:1px solid rgba(14,159,214,0.35);
+          background:rgba(14,159,214,0.1);
+        }
 
         .stat-card {
           background:rgba(255,255,255,0.04); border:1px solid rgba(124,58,237,0.25);
@@ -313,6 +316,12 @@ export default function Home() {
         .stat-card:hover {
           background:rgba(124,58,237,0.12); border-color:rgba(250,204,21,0.4);
           transform:translateY(-3px);
+        }
+        .stat-card.light {
+          background:rgba(14,159,214,0.05); border:1px solid rgba(14,159,214,0.2);
+        }
+        .stat-card.light:hover {
+          background:rgba(14,159,214,0.12); border-color:rgba(56,189,248,0.5);
         }
 
         .cta-primary {
@@ -325,6 +334,11 @@ export default function Home() {
           box-shadow:0 0 30px rgba(250,204,21,0.4); transition:all 0.2s;
         }
         .cta-primary:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 0 50px rgba(250,204,21,0.6); }
+        .cta-primary.light {
+          background:linear-gradient(90deg,#38bdf8,#0e9fd6); color:#ffffff;
+          box-shadow:0 0 30px rgba(14,159,214,0.4);
+        }
+        .cta-primary.light:hover { box-shadow:0 0 50px rgba(14,159,214,0.6); }
 
         .cta-secondary {
           display:inline-flex; align-items:center; gap:8px;
@@ -337,6 +351,11 @@ export default function Home() {
           transition:all 0.2s; animation:borderGlow 3s ease-in-out infinite;
         }
         .cta-secondary:hover { transform:translateY(-2px); background:rgba(124,58,237,0.2); }
+        .cta-secondary.light {
+          color:#0c3a5c; border:1px solid rgba(14,159,214,0.4);
+          background:rgba(14,159,214,0.08); animation:none;
+        }
+        .cta-secondary.light:hover { background:rgba(14,159,214,0.2); }
 
         .line-num {
           color:#4a5568; font-size:12px; user-select:none;
@@ -357,22 +376,25 @@ export default function Home() {
       <div
         className="absolute top-0 left-0 w-96 h-96 rounded-full pointer-events-none z-1"
         style={{
-          background:
-            "radial-gradient(circle,rgba(124,58,237,0.22) 0%,transparent 70%)",
+          background: isDark
+            ? "radial-gradient(circle,rgba(124,58,237,0.22) 0%,transparent 70%)"
+            : "radial-gradient(circle,rgba(14,159,214,0.18) 0%,transparent 70%)",
         }}
       />
       <div
         className="absolute bottom-0 right-0 w-80 h-80 rounded-full pointer-events-none z-1"
         style={{
-          background:
-            "radial-gradient(circle,rgba(250,204,21,0.1) 0%,transparent 70%)",
+          background: isDark
+            ? "radial-gradient(circle,rgba(250,204,21,0.1) 0%,transparent 70%)"
+            : "radial-gradient(circle,rgba(56,189,248,0.14) 0%,transparent 70%)",
         }}
       />
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full pointer-events-none z-1"
         style={{
-          background:
-            "radial-gradient(circle,rgba(124,58,237,0.05) 0%,transparent 65%)",
+          background: isDark
+            ? "radial-gradient(circle,rgba(124,58,237,0.05) 0%,transparent 65%)"
+            : "radial-gradient(circle,rgba(14,159,214,0.06) 0%,transparent 65%)",
         }}
       />
 
@@ -416,8 +438,9 @@ export default function Home() {
             Good ideas deserve{" "}
             <span
               style={{
-                background:
-                  "linear-gradient(90deg,#fde68a 0%,#f59e0b 40%,#fde68a 70%,#f59e0b 100%)",
+                background: isDark
+                  ? "linear-gradient(90deg,#fde68a 0%,#f59e0b 40%,#fde68a 70%,#f59e0b 100%)"
+                  : "linear-gradient(90deg,#38bdf8 0%,#0e9fd6 40%,#38bdf8 70%,#0e9fd6 100%)",
                 backgroundSize: "200% auto",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -441,7 +464,7 @@ export default function Home() {
           >
             Whether it's your first product or your tenth — I help bring it to
             life with clean code, thoughtful design, and a{" "}
-            <span style={{ color: "#f59e0b" }}>
+            <span style={{ color: isDark ? "#f59e0b" : "#0e9fd6" }}>
               genuine care for the end result.
             </span>
           </p>
@@ -455,11 +478,11 @@ export default function Home() {
               href="https://wa.me/2347066823448"
               target="_blank"
               rel="noopener noreferrer"
-              className="cta-primary"
+              className={`cta-primary ${isDark ? "" : "light"}`}
             >
               Build with me ↗
             </a>
-            <a href="#projects" className="cta-secondary">
+            <a href="#projects" className={`cta-secondary ${isDark ? "" : "light"}`}>
               View Work
             </a>
           </div>
@@ -472,7 +495,7 @@ export default function Home() {
             {SKILLS.map((s, i) => (
               <span
                 key={s}
-                className="skill-pill"
+                className={`skill-pill ${isDark ? "" : "light"}`}
                 style={{
                   animation: `floatSkill ${2.5 + i * 0.3}s ease-in-out ${i * 0.12}s infinite`,
                 }}
@@ -482,7 +505,7 @@ export default function Home() {
                     width: 5,
                     height: 5,
                     borderRadius: "50%",
-                    background: "#c4b5fd",
+                    background: isDark ? "#c4b5fd" : "#0e9fd6",
                     opacity: 0.6,
                     display: "inline-block",
                     flexShrink: 0,
@@ -503,13 +526,13 @@ export default function Home() {
               ["10+", "Projects"],
               ["5+", "Clients"],
             ].map(([num, label]) => (
-              <div key={label} className="stat-card">
+              <div key={label} className={`stat-card ${isDark ? "" : "light"}`}>
                 <p
                   style={{
                     fontFamily: "'Syne', sans-serif",
                     fontWeight: 800,
                     fontSize: 22,
-                    color: "#f59e0b",
+                    color: isDark ? "#f59e0b" : "#0e9fd6",
                     lineHeight: 1,
                     marginBottom: 3,
                   }}

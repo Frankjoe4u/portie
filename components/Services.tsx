@@ -160,19 +160,19 @@ export default function Services() {
   // ── Theme tokens ──
   const sectionBg = isDark
     ? "linear-gradient(180deg, #1a003e 0%, #0d0020 50%, #160040 100%)"
-    : "linear-gradient(180deg, #f5f3ff 0%, #ffffff 50%, #f5f3ff 100%)";
-  const cardBorder = isDark ? "rgba(255,255,255,0.06)" : "rgba(124,58,237,0.14)";
-  const cardBg = isDark ? "rgba(255,255,255,0.018)" : "rgba(124,58,237,0.02)";
-  const cardBgHover = isDark ? "rgba(255,255,255,0.03)" : "rgba(124,58,237,0.05)";
-  const headingColor = isDark ? "#fff" : "#1e1b3a";
-  const subCopyColor = isDark ? "rgba(255,255,255,0.32)" : "rgba(30,27,58,0.5)";
-  const cardTitleColor = isDark ? "#fff" : "#1e1b3a";
-  const cardDescColor = isDark ? "rgba(255,255,255,0.38)" : "rgba(30,27,58,0.55)";
-  const deliverableColor = isDark ? "rgba(255,255,255,0.45)" : "rgba(30,27,58,0.5)";
-  const deliverableHoverColor = isDark ? "rgba(255,255,255,0.58)" : "rgba(30,27,58,0.75)";
-  const idNumberColor = isDark ? "rgba(255,255,255,0.12)" : "rgba(30,27,58,0.15)";
-  const dividerBase = isDark ? "rgba(255,255,255,0.05)" : "rgba(124,58,237,0.15)";
-  const bottomNoteColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(30,27,58,0.25)";
+    : "linear-gradient(180deg, #eaf6fd 0%, #ffffff 50%, #eaf6fd 100%)";
+  const cardBorder = isDark ? "rgba(255,255,255,0.06)" : "rgba(14,159,214,0.18)";
+  const cardBg = isDark ? "rgba(255,255,255,0.018)" : "rgba(14,159,214,0.03)";
+  const cardBgHover = isDark ? "rgba(255,255,255,0.03)" : "rgba(14,159,214,0.06)";
+  const headingColor = isDark ? "#fff" : "#0c3a5c";
+  const subCopyColor = isDark ? "rgba(255,255,255,0.32)" : "rgba(12,58,92,0.55)";
+  const cardTitleColor = isDark ? "#fff" : "#0c3a5c";
+  const cardDescColor = isDark ? "rgba(255,255,255,0.38)" : "rgba(12,58,92,0.6)";
+  const deliverableColor = isDark ? "rgba(255,255,255,0.45)" : "rgba(12,58,92,0.55)";
+  const deliverableHoverColor = isDark ? "rgba(255,255,255,0.58)" : "rgba(12,58,92,0.8)";
+  const idNumberColor = isDark ? "rgba(255,255,255,0.12)" : "rgba(12,58,92,0.15)";
+  const dividerBase = isDark ? "rgba(255,255,255,0.05)" : "rgba(14,159,214,0.2)";
+  const bottomNoteColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(12,58,92,0.3)";
 
   return (
     <section
@@ -268,6 +268,14 @@ export default function Services() {
           transform: translateY(-2px) scale(1.03);
           box-shadow: 0 0 50px rgba(250,204,21,0.55);
         }
+        .cta-btn.light {
+          background: linear-gradient(90deg, #38bdf8, #0e9fd6);
+          color: #ffffff;
+          box-shadow: 0 0 28px rgba(14,159,214,0.35);
+        }
+        .cta-btn.light:hover {
+          box-shadow: 0 0 50px rgba(14,159,214,0.55);
+        }
       `}</style>
 
       {/* Background glow */}
@@ -279,7 +287,9 @@ export default function Services() {
           width: 800,
           height: 800,
           borderRadius: "50%",
-          background: "radial-gradient(circle, #7c3aed, transparent)",
+          background: isDark
+            ? "radial-gradient(circle, #7c3aed, transparent)"
+            : "radial-gradient(circle, #0ea5e9, transparent)",
           animation: "floatGlow 9s ease-in-out infinite",
           pointerEvents: "none",
           zIndex: 0,
@@ -293,7 +303,9 @@ export default function Services() {
           width: 300,
           height: 300,
           borderRadius: "50%",
-          background: "radial-gradient(circle, #facc15, transparent)",
+          background: isDark
+            ? "radial-gradient(circle, #facc15, transparent)"
+            : "radial-gradient(circle, #38bdf8, transparent)",
           opacity: 0.06,
           filter: "blur(60px)",
           pointerEvents: "none",
@@ -308,7 +320,9 @@ export default function Services() {
           width: 260,
           height: 260,
           borderRadius: "50%",
-          background: "radial-gradient(circle, #a78bfa, transparent)",
+          background: isDark
+            ? "radial-gradient(circle, #a78bfa, transparent)"
+            : "radial-gradient(circle, #7dd3fc, transparent)",
           opacity: 0.06,
           filter: "blur(50px)",
           pointerEvents: "none",
@@ -348,14 +362,14 @@ export default function Services() {
               style={{
                 height: 1,
                 width: 32,
-                background: "rgba(250,204,21,0.4)",
+                background: isDark ? "rgba(250,204,21,0.4)" : "rgba(14,159,214,0.4)",
               }}
             />
             <span
               style={{
                 fontFamily: "'Fira Code', monospace",
                 fontSize: 11,
-                color: "#facc15",
+                color: isDark ? "#facc15" : "#0e9fd6",
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
               }}
@@ -366,7 +380,7 @@ export default function Services() {
               style={{
                 height: 1,
                 width: 32,
-                background: "rgba(250,204,21,0.4)",
+                background: isDark ? "rgba(250,204,21,0.4)" : "rgba(14,159,214,0.4)",
               }}
             />
           </div>
@@ -405,8 +419,9 @@ export default function Services() {
             style={{
               marginTop: 36,
               height: 1,
-              background:
-                "linear-gradient(90deg, transparent, rgba(250,204,21,0.3), rgba(167,139,250,0.2), transparent)",
+              background: isDark
+                ? "linear-gradient(90deg, transparent, rgba(250,204,21,0.3), rgba(167,139,250,0.2), transparent)"
+                : "linear-gradient(90deg, transparent, rgba(14,159,214,0.35), rgba(56,189,248,0.25), transparent)",
             }}
           />
         </div>
@@ -581,7 +596,7 @@ export default function Services() {
             href="https://wa.me/2347066823448"
             target="_blank"
             rel="noopener noreferrer"
-            className="cta-btn"
+            className={`cta-btn ${isDark ? "" : "light"}`}
           >
             Let's discuss your project ↗
           </a>
