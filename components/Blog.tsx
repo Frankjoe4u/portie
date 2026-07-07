@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { dbConnect } from "@/lib/db/mongoose";
 import { BlogPost } from "@/models/BlogPost";
 import BlogClient, { type BlogPostDisplay } from "./BlogClient";
