@@ -8,7 +8,7 @@ export default async function Projects() {
 
   const docs = await Project.find()
     .sort({ order: 1, createdAt: -1 })
-    .lean<ProjectDisplay>()
+    .lean<ProjectDisplay[]>()
     .exec();
 
   const projects: ProjectDisplay[] = docs.map((p) => ({
