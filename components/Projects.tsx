@@ -1,3 +1,4 @@
+import React from "react";
 import { dbConnect } from "@/lib/db/mongoose";
 import { Project } from "@/models/Project";
 import ProjectsClient, { type ProjectDisplay } from "./ProjectsClient";
@@ -5,7 +6,10 @@ import ProjectsClient, { type ProjectDisplay } from "./ProjectsClient";
 export default async function Projects() {
   await dbConnect();
 
-  const docs = await Project.find().sort({ order: 1, createdAt: -1 }).lean();
+  const docs = await Project.find()
+    .sort({ order: 1, createdAt: -1 })
+    .lean<ProjectDisplay>()
+    .exec();
 
   const projects: ProjectDisplay[] = docs.map((p) => ({
     title: p.title,
@@ -16,5 +20,5 @@ export default async function Projects() {
     image: p.image,
   }));
 
-  return <ProjectsClient projects={projects} />;
+  return React.createElement(ProjectsClient, { projects });
 }

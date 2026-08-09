@@ -3,6 +3,7 @@ import { dbConnect } from "@/lib/db/mongoose";
 import { BlogPost } from "@/models/BlogPost";
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { slugify } from "@/lib/slugify";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
   await dbConnect();
@@ -69,6 +70,9 @@ export async function POST(request: NextRequest) {
       readTime: readTime || "5 min read",
       published: published !== false,
     });
+
+    revalidatePath("/");
+    revalidatePath("/blog/[slug]", "page");
 
     return NextResponse.json(post, { status: 201 });
   } catch (err) {

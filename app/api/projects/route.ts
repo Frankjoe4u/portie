@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db/mongoose";
 import { Project } from "@/models/Project";
 import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
   await dbConnect();
@@ -37,6 +38,8 @@ export async function POST(request: NextRequest) {
       imagePublicId,
       order: typeof order === "number" ? order : 0,
     });
+
+    revalidatePath("/");
 
     return NextResponse.json(project, { status: 201 });
   } catch (err) {
