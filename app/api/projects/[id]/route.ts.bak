@@ -3,8 +3,6 @@ import { dbConnect } from "@/lib/db/mongoose";
 import { Project } from "@/models/Project";
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { deleteCloudinaryImage } from "@/lib/cloudinary";
-import { isProjectCategory } from "@/lib/projectCategories";
-import { revalidatePath } from "next/cache";
 
 export async function PUT(
   request: NextRequest,
@@ -18,18 +16,8 @@ export async function PUT(
   try {
     const { id } = await context.params;
     const body = await request.json();
-    const {
-      title,
-      description,
-      category,
-      tech,
-      live,
-      github,
-      color,
-      image,
-      imagePublicId,
-      order,
-    } = body;
+    const { title, tech, live, github, color, image, imagePublicId, order } =
+      body;
 
     const existing = await Project.findById(id);
     if (!existing) {
@@ -46,8 +34,6 @@ export async function PUT(
     }
 
     existing.title = title ?? existing.title;
-    if (typeof description === "string") existing.description = description.trim();
-    if (isProjectCategory(category)) existing.category = category;
     existing.tech = Array.isArray(tech) ? tech : existing.tech;
     existing.live = live ?? existing.live;
     existing.github = github ?? existing.github;
@@ -57,8 +43,6 @@ export async function PUT(
     if (typeof order === "number") existing.order = order;
 
     await existing.save();
-
-    revalidatePath("/");
 
     return NextResponse.json(existing);
   } catch (err) {
@@ -88,8 +72,6 @@ export async function DELETE(
     }
 
     await deleteCloudinaryImage(project.imagePublicId);
-
-    revalidatePath("/");
 
     return NextResponse.json({ success: true });
   } catch (err) {

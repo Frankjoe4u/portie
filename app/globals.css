@@ -2,14 +2,59 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------- Light theme ---------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f7fd;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --card-hover: #f0f4ff;
+  --line: #d9e1f5;
+  --ink: #0a1128;
+  --muted: #56627f;
+  --brand: #2f6bff;
+  --brand-2: #7b4dff;
+  --brand-soft: rgba(47, 107, 255, 0.1);
+  --glow: rgba(79, 110, 255, 0.18);
+  --shadow: 0 10px 30px rgba(20, 40, 110, 0.08);
+
+  /* kept so existing components keep working during the revamp */
+  --background: var(--bg);
+  --foreground: var(--ink);
 }
 
+/* ---------- Dark theme (matches the mockup) ---------- */
 .dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --bg: #050816;
+  --surface: #080d20;
+  --card: #0b1330;
+  --card-hover: #0f1a40;
+  --line: rgba(96, 130, 255, 0.2);
+  --ink: #eef2ff;
+  --muted: #94a3c7;
+  --brand: #3b73ff;
+  --brand-2: #8b5cf6;
+  --brand-soft: rgba(59, 115, 255, 0.14);
+  --glow: rgba(90, 80, 255, 0.35);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+  --background: var(--bg);
+  --foreground: var(--ink);
+}
+
+/* Tailwind utilities: bg-bg, bg-surface, bg-card, border-line, text-ink, text-muted, text-brand ... */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-brand-soft: var(--brand-soft);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 html {
@@ -17,7 +62,89 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ---------- Shared building blocks ---------- */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 1152px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+
+  .text-brand-gradient {
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+  }
+  .card:hover {
+    border-color: var(--brand);
+    background: var(--card-hover);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.7rem 1.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .btn-primary {
+    color: #ffffff;
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    box-shadow: 0 8px 24px var(--glow);
+  }
+  .btn-outline {
+    color: var(--ink);
+    border: 1px solid var(--line);
+    background: transparent;
+  }
+  .btn-outline:hover {
+    border-color: var(--brand);
+  }
+
+  .chip {
+    display: inline-block;
+    border-radius: 0.5rem;
+    border: 1px solid var(--line);
+    background: var(--brand-soft);
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .hero-glow {
+    background:
+      radial-gradient(60% 60% at 75% 40%, var(--glow), transparent 70%),
+      radial-gradient(40% 40% at 10% 90%, var(--brand-soft), transparent 70%);
+  }
 }

@@ -3,7 +3,6 @@ import { dbConnect } from "@/lib/db/mongoose";
 import { Project } from "@/models/Project";
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { revalidatePath } from "next/cache";
-import { isProjectCategory } from "@/lib/projectCategories";
 
 export async function GET() {
   await dbConnect();
@@ -19,18 +18,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const {
-      title,
-      description,
-      category,
-      tech,
-      live,
-      github,
-      color,
-      image,
-      imagePublicId,
-      order,
-    } = body;
+    const { title, tech, live, github, color, image, imagePublicId, order } =
+      body;
 
     if (!title || !live || !github || !image) {
       return NextResponse.json(
@@ -41,8 +30,6 @@ export async function POST(request: NextRequest) {
 
     const project = await Project.create({
       title,
-      description: typeof description === "string" ? description.trim() : "",
-      category: isProjectCategory(category) ? category : "web",
       tech: Array.isArray(tech) ? tech : [],
       live,
       github,

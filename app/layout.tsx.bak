@@ -60,9 +60,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
       </body>
+      <Analytics />
+      <SpeedInsights />
     </html>
   );
 }

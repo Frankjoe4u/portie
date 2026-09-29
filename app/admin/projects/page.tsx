@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { PROJECT_CATEGORIES } from "@/lib/projectCategories";
 
 type Project = {
   _id: string;
   title: string;
+  description?: string;
+  category?: string;
   tech: string[];
   live: string;
   github: string;
@@ -17,6 +20,8 @@ type Project = {
 
 const emptyForm = {
   title: "",
+  description: "",
+  category: "web",
   techInput: "",
   live: "",
   github: "",
@@ -44,7 +49,18 @@ export default function AdminProjectsPage() {
   };
 
   useEffect(() => {
-    loadProjects();
+    let cancelled = false;
+    (async () => {
+      const res = await fetch("/api/projects");
+      const data = await res.json();
+      if (!cancelled) {
+        setProjects(data);
+        setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const resetForm = () => {
@@ -57,6 +73,8 @@ export default function AdminProjectsPage() {
     setEditingId(p._id);
     setForm({
       title: p.title,
+      description: p.description || "",
+      category: p.category || "web",
       techInput: p.tech.join(", "),
       live: p.live,
       github: p.github,
@@ -98,6 +116,8 @@ export default function AdminProjectsPage() {
 
     const payload = {
       title: form.title,
+      description: form.description,
+      category: form.category,
       tech: form.techInput
         .split(",")
         .map((t) => t.trim())
@@ -184,6 +204,30 @@ export default function AdminProjectsPage() {
                 required
                 value={form.title}
                 onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                style={inputStyle}
+              />
+            </FormField>
+
+            <FormField label="Category (used by the filter tabs on the site)">
+              <select
+                value={form.category}
+                onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+                style={{ ...inputStyle, background: "#1a003e" }}
+              >
+                {PROJECT_CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+
+            <FormField label="Short Description (optional, shown on the project card)">
+              <input
+                maxLength={90}
+                placeholder="Track your goals, build your future."
+                value={form.description}
+                onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                 style={inputStyle}
               />
             </FormField>
@@ -337,7 +381,9 @@ export default function AdminProjectsPage() {
                 />
                 <div style={{ flex: 1 }}>
                   <p style={{ color: "#fff", fontWeight: 700, fontSize: 15 }}>{p.title}</p>
-                  <p style={{ color: "#9ca3af", fontSize: 12 }}>{p.tech.join(", ")}</p>
+                  <p style={{ color: "#9ca3af", fontSize: 12 }}>
+                    {PROJECT_CATEGORIES.find((c) => c.value === p.category)?.label ?? "Uncategorized"} &middot; {p.tech.join(", ")}
+                  </p>
                 </div>
                 <button
                   onClick={() => startEdit(p)}

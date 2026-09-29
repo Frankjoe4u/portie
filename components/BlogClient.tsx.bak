@@ -33,9 +33,6 @@ function Cover({ src, tag }: { src?: string; tag: string }) {
       src={src}
       alt=""
       loading="lazy"
-      ref={(el) => {
-        if (el && el.complete && el.naturalWidth === 0) setFailed(true);
-      }}
       onError={() => setFailed(true)}
       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
     />

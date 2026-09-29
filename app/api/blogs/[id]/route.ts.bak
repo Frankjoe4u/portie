@@ -4,7 +4,6 @@ import { BlogPost } from "@/models/BlogPost";
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { deleteCloudinaryImage } from "@/lib/cloudinary";
 import { slugify } from "@/lib/slugify";
-import { revalidatePath } from "next/cache";
 
 export async function PUT(
   request: NextRequest,
@@ -70,9 +69,6 @@ export async function PUT(
 
     await existing.save();
 
-    revalidatePath("/");
-    revalidatePath("/blog/[slug]", "page");
-
     return NextResponse.json(existing);
   } catch (err) {
     console.error("Update blog post error:", err);
@@ -101,9 +97,6 @@ export async function DELETE(
     }
 
     await deleteCloudinaryImage(post.coverImagePublicId);
-
-    revalidatePath("/");
-    revalidatePath("/blog/[slug]", "page");
 
     return NextResponse.json({ success: true });
   } catch (err) {

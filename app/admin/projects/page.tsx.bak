@@ -2,37 +2,37 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { PROJECT_CATEGORIES } from "@/lib/projectCategories";
 
-type BlogPost = {
+type Project = {
   _id: string;
-  slug: string;
   title: string;
-  tag: string;
-  tagColor: string;
-  date: string;
-  excerpt: string;
-  content: string;
-  coverImage?: string;
-  coverImagePublicId?: string;
-  readTime: string;
-  published: boolean;
+  description?: string;
+  category?: string;
+  tech: string[];
+  live: string;
+  github: string;
+  color: string;
+  image: string;
+  imagePublicId?: string;
+  order: number;
 };
 
 const emptyForm = {
   title: "",
-  tag: "",
-  tagColor: "#facc15",
-  date: "",
-  excerpt: "",
-  content: "",
-  coverImage: "",
-  coverImagePublicId: "",
-  readTime: "5 min read",
-  published: true,
+  description: "",
+  category: "web",
+  techInput: "",
+  live: "",
+  github: "",
+  color: "#facc15",
+  image: "",
+  imagePublicId: "",
+  order: 0,
 };
 
-export default function AdminBlogsPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+export default function AdminProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
@@ -40,27 +40,16 @@ export default function AdminBlogsPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadPosts = async () => {
+  const loadProjects = async () => {
     setLoading(true);
-    const res = await fetch("/api/blogs?all=true");
+    const res = await fetch("/api/projects");
     const data = await res.json();
-    setPosts(data);
+    setProjects(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const res = await fetch("/api/blogs?all=true");
-      const data = await res.json();
-      if (!cancelled) {
-        setPosts(data);
-        setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
+    loadProjects();
   }, []);
 
   const resetForm = () => {
@@ -69,19 +58,19 @@ export default function AdminBlogsPage() {
     setError(null);
   };
 
-  const startEdit = (p: BlogPost) => {
+  const startEdit = (p: Project) => {
     setEditingId(p._id);
     setForm({
       title: p.title,
-      tag: p.tag,
-      tagColor: p.tagColor,
-      date: p.date,
-      excerpt: p.excerpt,
-      content: p.content,
-      coverImage: p.coverImage || "",
-      coverImagePublicId: p.coverImagePublicId || "",
-      readTime: p.readTime,
-      published: p.published,
+      description: p.description || "",
+      category: p.category || "web",
+      techInput: p.tech.join(", "),
+      live: p.live,
+      github: p.github,
+      color: p.color,
+      image: p.image,
+      imagePublicId: p.imagePublicId || "",
+      order: p.order,
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -95,11 +84,7 @@ export default function AdminBlogsPage() {
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       if (!res.ok) throw new Error("Upload failed");
       const data = await res.json();
-      setForm((f) => ({
-        ...f,
-        coverImage: data.url,
-        coverImagePublicId: data.publicId,
-      }));
+      setForm((f) => ({ ...f, image: data.url, imagePublicId: data.publicId }));
     } catch {
       setError("Image upload failed. Try again.");
     } finally {
@@ -110,16 +95,38 @@ export default function AdminBlogsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!form.image) {
+      setError("Please upload an image before saving.");
+      return;
+    }
+
     setSaving(true);
 
+    const payload = {
+      title: form.title,
+      description: form.description,
+      category: form.category,
+      tech: form.techInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+      live: form.live,
+      github: form.github,
+      color: form.color,
+      image: form.image,
+      imagePublicId: form.imagePublicId,
+      order: Number(form.order) || 0,
+    };
+
     try {
-      const url = editingId ? `/api/blogs/${editingId}` : "/api/blogs";
+      const url = editingId ? `/api/projects/${editingId}` : "/api/projects";
       const method = editingId ? "PUT" : "POST";
 
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -128,7 +135,7 @@ export default function AdminBlogsPage() {
       }
 
       resetForm();
-      await loadPosts();
+      await loadProjects();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
     } finally {
@@ -137,12 +144,12 @@ export default function AdminBlogsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this post? This cannot be undone.")) return;
-    const res = await fetch(`/api/blogs/${id}`, { method: "DELETE" });
+    if (!confirm("Delete this project? This cannot be undone.")) return;
+    const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
     if (res.ok) {
-      await loadPosts();
+      await loadProjects();
     } else {
-      alert("Failed to delete post.");
+      alert("Failed to delete project.");
     }
   };
 
@@ -162,9 +169,10 @@ export default function AdminBlogsPage() {
         </div>
 
         <h1 style={{ color: "#fff", fontSize: 26, fontWeight: 800, marginBottom: 24 }}>
-          Manage Blog Posts
+          Manage Projects
         </h1>
 
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
           style={{
@@ -175,8 +183,8 @@ export default function AdminBlogsPage() {
             marginBottom: 32,
           }}
         >
-          <h2 style={{ color: "#a78bfa", fontSize: 16, fontWeight: 700, marginBottom: 16 }}>
-            {editingId ? "Edit Post" : "Write New Post"}
+          <h2 style={{ color: "#facc15", fontSize: 16, fontWeight: 700, marginBottom: 16 }}>
+            {editingId ? "Edit Project" : "Add New Project"}
           </h2>
 
           <div style={{ display: "grid", gap: 14 }}>
@@ -189,68 +197,79 @@ export default function AdminBlogsPage() {
               />
             </FormField>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12 }}>
-              <FormField label="Tag">
-                <input
-                  required
-                  placeholder="Next.js / PWA"
-                  value={form.tag}
-                  onChange={(e) => setForm((f) => ({ ...f, tag: e.target.value }))}
-                  style={inputStyle}
-                />
-              </FormField>
-              <FormField label="Tag Color">
-                <input
-                  type="color"
-                  value={form.tagColor}
-                  onChange={(e) => setForm((f) => ({ ...f, tagColor: e.target.value }))}
-                  style={{ ...inputStyle, padding: 4, height: 42 }}
-                />
-              </FormField>
-              <FormField label="Date (e.g. Jun 2026)">
-                <input
-                  placeholder="auto if blank"
-                  value={form.date}
-                  onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-                  style={inputStyle}
-                />
-              </FormField>
-              <FormField label="Read Time">
-                <input
-                  placeholder="5 min read"
-                  value={form.readTime}
-                  onChange={(e) => setForm((f) => ({ ...f, readTime: e.target.value }))}
-                  style={inputStyle}
-                />
-              </FormField>
-            </div>
+            <FormField label="Category (used by the filter tabs on the site)">
+              <select
+                value={form.category}
+                onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+                style={{ ...inputStyle, background: "#1a003e" }}
+              >
+                {PROJECT_CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </FormField>
 
-            <FormField label="Excerpt">
-              <textarea
-                required
-                rows={2}
-                value={form.excerpt}
-                onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))}
-                style={{ ...inputStyle, resize: "vertical" }}
+            <FormField label="Short Description (optional, shown on the project card)">
+              <input
+                maxLength={90}
+                placeholder="Track your goals, build your future."
+                value={form.description}
+                onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                style={inputStyle}
               />
             </FormField>
 
-            <FormField label="Content (Markdown)">
-              <textarea
+            <FormField label="Tech Stack (comma separated)">
+              <input
                 required
-                rows={14}
-                value={form.content}
-                onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
-                style={{
-                  ...inputStyle,
-                  resize: "vertical",
-                  fontFamily: "monospace",
-                  fontSize: 13,
-                }}
+                placeholder="Next.js, TypeScript, Tailwind CSS"
+                value={form.techInput}
+                onChange={(e) => setForm((f) => ({ ...f, techInput: e.target.value }))}
+                style={inputStyle}
               />
             </FormField>
 
-            <FormField label="Cover Image (optional)">
+            <FormField label="Live URL">
+              <input
+                required
+                type="url"
+                value={form.live}
+                onChange={(e) => setForm((f) => ({ ...f, live: e.target.value }))}
+                style={inputStyle}
+              />
+            </FormField>
+
+            <FormField label="GitHub URL">
+              <input
+                required
+                type="url"
+                value={form.github}
+                onChange={(e) => setForm((f) => ({ ...f, github: e.target.value }))}
+                style={inputStyle}
+              />
+            </FormField>
+
+            <FormField label="Accent Color">
+              <input
+                type="color"
+                value={form.color}
+                onChange={(e) => setForm((f) => ({ ...f, color: e.target.value }))}
+                style={{ ...inputStyle, padding: 4, height: 42, width: 80 }}
+              />
+            </FormField>
+
+            <FormField label="Order (lower shows first)">
+              <input
+                type="number"
+                value={form.order}
+                onChange={(e) => setForm((f) => ({ ...f, order: Number(e.target.value) }))}
+                style={inputStyle}
+              />
+            </FormField>
+
+            <FormField label="Project Image">
               <input
                 type="file"
                 accept="image/*"
@@ -265,9 +284,9 @@ export default function AdminBlogsPage() {
                   Uploading...
                 </p>
               )}
-              {form.coverImage && (
+              {form.image && (
                 <img
-                  src={form.coverImage}
+                  src={form.image}
                   alt="Preview"
                   style={{
                     marginTop: 10,
@@ -280,15 +299,6 @@ export default function AdminBlogsPage() {
                 />
               )}
             </FormField>
-
-            <label style={{ display: "flex", alignItems: "center", gap: 8, color: "#d1d5db", fontSize: 13 }}>
-              <input
-                type="checkbox"
-                checked={form.published}
-                onChange={(e) => setForm((f) => ({ ...f, published: e.target.checked }))}
-              />
-              Published (visible on public site)
-            </label>
           </div>
 
           {error && (
@@ -300,7 +310,7 @@ export default function AdminBlogsPage() {
               type="submit"
               disabled={saving || uploading}
               style={{
-                background: "#a78bfa",
+                background: "#facc15",
                 color: "#000",
                 fontWeight: 700,
                 border: "none",
@@ -311,7 +321,7 @@ export default function AdminBlogsPage() {
                 opacity: saving || uploading ? 0.7 : 1,
               }}
             >
-              {saving ? "Saving..." : editingId ? "Update Post" : "Publish Post"}
+              {saving ? "Saving..." : editingId ? "Update Project" : "Add Project"}
             </button>
             {editingId && (
               <button
@@ -333,13 +343,14 @@ export default function AdminBlogsPage() {
           </div>
         </form>
 
+        {/* List */}
         {loading ? (
-          <p style={{ color: "#9ca3af" }}>Loading posts...</p>
-        ) : posts.length === 0 ? (
-          <p style={{ color: "#9ca3af" }}>No posts yet. Write one above.</p>
+          <p style={{ color: "#9ca3af" }}>Loading projects...</p>
+        ) : projects.length === 0 ? (
+          <p style={{ color: "#9ca3af" }}>No projects yet. Add one above.</p>
         ) : (
           <div style={{ display: "grid", gap: 12 }}>
-            {posts.map((p) => (
+            {projects.map((p) => (
               <div
                 key={p._id}
                 style={{
@@ -352,16 +363,16 @@ export default function AdminBlogsPage() {
                   padding: 14,
                 }}
               >
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 8 }}
+                />
                 <div style={{ flex: 1 }}>
-                  <p style={{ color: "#fff", fontWeight: 700, fontSize: 15 }}>
-                    {p.title}{" "}
-                    {!p.published && (
-                      <span style={{ color: "#f87171", fontSize: 11, fontWeight: 600 }}>
-                        (draft)
-                      </span>
-                    )}
+                  <p style={{ color: "#fff", fontWeight: 700, fontSize: 15 }}>{p.title}</p>
+                  <p style={{ color: "#9ca3af", fontSize: 12 }}>
+                    {PROJECT_CATEGORIES.find((c) => c.value === p.category)?.label ?? "Uncategorized"} &middot; {p.tech.join(", ")}
                   </p>
-                  <p style={{ color: "#9ca3af", fontSize: 12 }}>/{p.slug}</p>
                 </div>
                 <button
                   onClick={() => startEdit(p)}

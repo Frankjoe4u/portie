@@ -1,849 +1,188 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
-import { useTheme } from "next-themes";
+import Image from "next/image";
+import { Caveat } from "next/font/google";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+const script = Caveat({ subsets: ["latin"], weight: ["500", "700"] });
 
-const FILE_TABS = ["role.ts", "stack.json", "contact.ts"];
-
-const CODE_BLOCKS: Record<
-  string,
+const socials = [
   {
-    lines: {
-      text: string;
-      indent: number;
-      kind:
-        | "keyword"
-        | "string"
-        | "comment"
-        | "type"
-        | "value"
-        | "plain"
-        | "fn";
-    }[];
-  }
-> = {
-  "role.ts": {
-    lines: [
-      {
-        text: "// ✦ Available for new opportunities",
-        indent: 0,
-        kind: "comment",
-      },
-      { text: "", indent: 0, kind: "plain" },
-      { text: "interface Developer {", indent: 0, kind: "plain" },
-      { text: "name:", indent: 1, kind: "keyword" },
-      { text: "  'Frank Joe';", indent: 1, kind: "string" },
-      { text: "role:", indent: 1, kind: "keyword" },
-      { text: "  'Full Stack Engineer';", indent: 1, kind: "string" },
-      { text: "focus:", indent: 1, kind: "keyword" },
-      { text: "  'Performance' | 'UX' | 'Scale';", indent: 1, kind: "type" },
-      { text: "available:", indent: 1, kind: "keyword" },
-      { text: "  true;", indent: 1, kind: "value" },
-      { text: "}", indent: 0, kind: "plain" },
-      { text: "", indent: 0, kind: "plain" },
-      { text: "export const build = (", indent: 0, kind: "fn" },
-      { text: "  idea: string", indent: 1, kind: "plain" },
-      { text: "): Promise<Product> => {", indent: 0, kind: "fn" },
-      { text: "  return ship(idea); ✓", indent: 1, kind: "value" },
-      { text: "}", indent: 0, kind: "plain" },
-    ],
+    label: "GitHub",
+    href: "https://github.com/Frankjoe4u",
+    path: "M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z",
   },
-  "stack.json": {
-    lines: [
-      { text: "{", indent: 0, kind: "plain" },
-      { text: '"frontend":', indent: 1, kind: "keyword" },
-      {
-        text: '  ["React", "Next.js", "TypeScript"],',
-        indent: 1,
-        kind: "string",
-      },
-      { text: '"backend":', indent: 1, kind: "keyword" },
-      { text: '  ["Node.js", "Express", "REST"],', indent: 1, kind: "string" },
-      { text: '"database":', indent: 1, kind: "keyword" },
-      { text: '  ["MongoDB", "PostgreSQL"],', indent: 1, kind: "string" },
-      { text: '"styling":', indent: 1, kind: "keyword" },
-      {
-        text: '  ["TailwindCSS", "Framer Motion"],',
-        indent: 1,
-        kind: "string",
-      },
-      { text: '"tools":', indent: 1, kind: "keyword" },
-      { text: '  ["Git", "Docker", "Vercel"]', indent: 1, kind: "string" },
-      { text: "}", indent: 0, kind: "plain" },
-    ],
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/franklin-emeka-agbo-799396431?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    path: "M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z",
   },
-  "contact.ts": {
-    lines: [
-      { text: "// Let's build something great", indent: 0, kind: "comment" },
-      { text: "", indent: 0, kind: "plain" },
-      { text: "export const contact = {", indent: 0, kind: "fn" },
-      { text: "email:", indent: 1, kind: "keyword" },
-      { text: '  "frankjoe4u@gmail.com",', indent: 1, kind: "string" },
-      { text: "github:", indent: 1, kind: "keyword" },
-      { text: '  "github.com/frankjoe4u",', indent: 1, kind: "string" },
-      { text: "linkedin:", indent: 1, kind: "keyword" },
-      { text: '  "linkedin.com/in/frankjoe4u",', indent: 1, kind: "string" },
-      { text: "whatsapp:", indent: 1, kind: "keyword" },
-      { text: '  "+234 706 682 3448",', indent: 1, kind: "value" },
-      { text: "status:", indent: 1, kind: "keyword" },
-      { text: '  "Open to work ✦"', indent: 1, kind: "value" },
-      { text: "}", indent: 0, kind: "plain" },
-    ],
+  {
+    label: "X",
+    href: "https://x.com/FJ_AirMayCar",
+    path: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
   },
-};
-
-const SKILLS = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "Node.js",
-  "MongoDB",
-  "TailwindCSS",
-  "Docker",
-  "PostgreSQL",
 ];
 
-const kindColor: Record<string, string> = {
-  keyword: "#79c0ff",
-  string: "#a5d6a7",
-  comment: "#6e7681",
-  type: "#d2a8ff",
-  value: "#ffa657",
-  fn: "#fde68a",
-  plain: "#e2e8f0",
-};
-
-// ─── Component ────────────────────────────────────────────────────────────────
 export default function Home() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [activeTab, setActiveTab] = useState(0);
-  const [visibleLines, setVisibleLines] = useState(0);
-  const [typedChars, setTypedChars] = useState(0);
-  const [currentLineIdx, setCurrentLineIdx] = useState(0);
-  const [cursorOn, setCursorOn] = useState(true);
-  const [time, setTime] = useState("");
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-  const isDark = mounted ? theme === "dark" : true;
-
-  useEffect(() => {
-    const tick = () =>
-      setTime(
-        new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      );
-    tick();
-    const id = setInterval(tick, 10000);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    const id = setInterval(() => setCursorOn((v) => !v), 500);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    setVisibleLines(0);
-    setTypedChars(0);
-    setCurrentLineIdx(0);
-  }, [activeTab]);
-
-  useEffect(() => {
-    const lines = CODE_BLOCKS[FILE_TABS[activeTab]].lines;
-    if (currentLineIdx >= lines.length) return;
-    const line = lines[currentLineIdx];
-    const full = "  ".repeat(line.indent) + line.text;
-    if (typedChars < full.length) {
-      const t = setTimeout(
-        () => setTypedChars((c) => c + 1),
-        line.kind === "comment" ? 22 : 18,
-      );
-      return () => clearTimeout(t);
-    } else {
-      const t = setTimeout(
-        () => {
-          setVisibleLines((v) => v + 1);
-          setCurrentLineIdx((i) => i + 1);
-          setTypedChars(0);
-        },
-        full.length === 0 ? 60 : 80,
-      );
-      return () => clearTimeout(t);
-    }
-  }, [currentLineIdx, typedChars, activeTab]);
-
-  // Star canvas
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    let animId: number;
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-    const stars = Array.from({ length: 140 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 1.4 + 0.2,
-      speed: Math.random() * 0.2 + 0.04,
-      angle: Math.random() * Math.PI * 2,
-      opacity: Math.random(),
-      tw: Math.random() * 0.018 + 0.004,
-      twOff: Math.random() * Math.PI * 2,
-    }));
-    let t = 0;
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t += 0.016;
-      for (const s of stars) {
-        s.x += Math.cos(s.angle) * s.speed;
-        s.y += Math.sin(s.angle) * s.speed;
-        if (s.x < -5) s.x = canvas.width + 5;
-        if (s.x > canvas.width + 5) s.x = -5;
-        if (s.y < -5) s.y = canvas.height + 5;
-        if (s.y > canvas.height + 5) s.y = -5;
-        const tw = 0.3 + 0.7 * Math.abs(Math.sin(t * s.tw * 60 + s.twOff));
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${tw * s.opacity})`;
-        ctx.fill();
-      }
-      animId = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
-  const lines = CODE_BLOCKS[FILE_TABS[activeTab]].lines;
-
-  const mainBg = isDark
-    ? "linear-gradient(135deg,#0a001f 0%,#160040 50%,#0a0020 100%)"
-    : "linear-gradient(135deg,#eaf6fd 0%,#dff3fc 50%,#f8fdff 100%)";
-  const headlineColor = isDark ? "#e2e8f0" : "#0c3a5c";
-  const bodyColor = isDark ? "#94a3b8" : "#3d6b85";
-  const microLabelColor = isDark ? "#c4b5fd" : "#0e9fd6";
-  const statLabelColor = isDark ? "#64748b" : "#5b8299";
-
   return (
-    <main
+    <section
       id="home"
-      className="relative overflow-hidden flex flex-col items-center justify-start pt-20 pb-16"
-      style={{ background: mainBg }}
+      className="hero-glow relative overflow-hidden pb-16 pt-28 md:pb-24 md:pt-36"
     >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Syne:wght@700;800&display=swap');
+      <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-8">
+        {/* Text */}
+        <div className="order-1">
+          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-brand-soft px-3.5 py-1.5 text-xs font-medium text-ink">
+            <span aria-hidden="true">{"\uD83D\uDC4B"}</span>
+            Hello, I&apos;m
+          </span>
 
-        @keyframes fadeSlideUp {
-          from { opacity:0; transform:translateY(24px); }
-          to   { opacity:1; transform:translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity:0; } to { opacity:1; }
-        }
-        @keyframes scaleIn {
-          from { opacity:0; transform:scale(0.95); }
-          to   { opacity:1; transform:scale(1); }
-        }
-        @keyframes glowPulse {
-          0%,100% { box-shadow: 0 0 30px rgba(124,58,237,0.35), inset 0 0 30px rgba(124,58,237,0.06); }
-          50%      { box-shadow: 0 0 70px rgba(124,58,237,0.6), inset 0 0 60px rgba(124,58,237,0.12); }
-        }
-        @keyframes scanline {
-          0%   { transform: translateY(-100%); }
-          100% { transform: translateY(500px); }
-        }
-        @keyframes borderGlow {
-          0%,100% { border-color: rgba(124,58,237,0.4); }
-          50%      { border-color: rgba(250,204,21,0.6); }
-        }
-        @keyframes shimmerGold {
-          0%   { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-        @keyframes nameReveal {
-          0%   { opacity:0; letter-spacing:0.4em; filter:blur(10px); }
-          100% { opacity:1; letter-spacing:-0.02em; filter:blur(0); }
-        }
-        @keyframes floatSkill {
-          0%,100% { transform:translateY(0px); }
-          50%      { transform:translateY(-4px); }
-        }
-
-        .scanline-fx { animation: scanline 3s linear infinite; }
-
-        .tab-btn {
-          cursor:pointer; border:none; outline:none; background:transparent;
-          font-family:'Fira Code',monospace; font-size:12px;
-          padding:8px 16px; border-right:1px solid rgba(124,58,237,0.2);
-          color:#64748b; transition:all 0.18s; white-space:nowrap;
-        }
-        .tab-btn:hover { color:#e2e8f0; background:rgba(124,58,237,0.1); }
-        .tab-btn.active {
-          color:#fde68a; background:rgba(124,58,237,0.15);
-          border-bottom:2px solid #fde68a; margin-bottom:-1px;
-        }
-
-        .skill-pill {
-          display:inline-flex; align-items:center; gap:5px;
-          padding:4px 11px; border-radius:20px;
-          font-family:'Fira Code',monospace; font-size:11px;
-          color:#c4b5fd; border:1px solid rgba(124,58,237,0.35);
-          background:rgba(124,58,237,0.1); white-space:nowrap;
-          backdrop-filter:blur(8px);
-        }
-        .skill-pill.light {
-          color:#0c6a94; border:1px solid rgba(14,159,214,0.35);
-          background:rgba(14,159,214,0.1);
-        }
-
-        .stat-card {
-          background:rgba(255,255,255,0.04); border:1px solid rgba(124,58,237,0.25);
-          border-radius:10px; padding:14px 20px; min-width:80px;
-          backdrop-filter:blur(10px); transition:all 0.2s;
-        }
-        .stat-card:hover {
-          background:rgba(124,58,237,0.12); border-color:rgba(250,204,21,0.4);
-          transform:translateY(-3px);
-        }
-        .stat-card.light {
-          background:rgba(14,159,214,0.05); border:1px solid rgba(14,159,214,0.2);
-        }
-        .stat-card.light:hover {
-          background:rgba(14,159,214,0.12); border-color:rgba(56,189,248,0.5);
-        }
-
-        .cta-primary {
-          display:inline-flex; align-items:center; gap:8px;
-          padding:13px 28px; border-radius:50px;
-          font-family:'Syne',sans-serif; font-weight:700; font-size:13px;
-          letter-spacing:0.08em; text-transform:uppercase;
-          text-decoration:none; cursor:pointer; border:none;
-          background:linear-gradient(90deg,#fde68a,#f59e0b); color:#0a001f;
-          box-shadow:0 0 30px rgba(250,204,21,0.4); transition:all 0.2s;
-        }
-        .cta-primary:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 0 50px rgba(250,204,21,0.6); }
-        .cta-primary.light {
-          background:linear-gradient(90deg,#38bdf8,#0e9fd6); color:#ffffff;
-          box-shadow:0 0 30px rgba(14,159,214,0.4);
-        }
-        .cta-primary.light:hover { box-shadow:0 0 50px rgba(14,159,214,0.6); }
-
-        .cta-secondary {
-          display:inline-flex; align-items:center; gap:8px;
-          padding:13px 28px; border-radius:50px;
-          font-family:'Syne',sans-serif; font-weight:600; font-size:13px;
-          letter-spacing:0.08em; text-transform:uppercase;
-          text-decoration:none; cursor:pointer;
-          color:#e2e8f0; border:1px solid rgba(124,58,237,0.4);
-          background:rgba(124,58,237,0.08); backdrop-filter:blur(10px);
-          transition:all 0.2s; animation:borderGlow 3s ease-in-out infinite;
-        }
-        .cta-secondary:hover { transform:translateY(-2px); background:rgba(124,58,237,0.2); }
-        .cta-secondary.light {
-          color:#0c3a5c; border:1px solid rgba(14,159,214,0.4);
-          background:rgba(14,159,214,0.08); animation:none;
-        }
-        .cta-secondary.light:hover { background:rgba(14,159,214,0.2); }
-
-        .line-num {
-          color:#4a5568; font-size:12px; user-select:none;
-          min-width:24px; text-align:right;
-          padding-right:14px; border-right:1px solid rgba(124,58,237,0.15);
-          margin-right:14px; flex-shrink:0;
-        }
-      `}</style>
-
-      {/* Star canvas — fades out in light mode */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full z-0 transition-opacity duration-300"
-        style={{ opacity: isDark ? 1 : 0 }}
-      />
-
-      {/* Nebula blobs */}
-      <div
-        className="absolute top-0 left-0 w-96 h-96 rounded-full pointer-events-none z-1"
-        style={{
-          background: isDark
-            ? "radial-gradient(circle,rgba(124,58,237,0.22) 0%,transparent 70%)"
-            : "radial-gradient(circle,rgba(14,159,214,0.18) 0%,transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 right-0 w-80 h-80 rounded-full pointer-events-none z-1"
-        style={{
-          background: isDark
-            ? "radial-gradient(circle,rgba(250,204,21,0.1) 0%,transparent 70%)"
-            : "radial-gradient(circle,rgba(56,189,248,0.14) 0%,transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full pointer-events-none z-1"
-        style={{
-          background: isDark
-            ? "radial-gradient(circle,rgba(124,58,237,0.05) 0%,transparent 65%)"
-            : "radial-gradient(circle,rgba(14,159,214,0.06) 0%,transparent 65%)",
-        }}
-      />
-
-      {/* Main layout */}
-      <div className="w-full max-w-6xl mx-auto px-6 py-8 pt-24 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-        {/* ── LEFT ── */}
-        <div
-          className="flex-1 text-left"
-          style={{
-            animation: "fadeSlideUp 0.7s ease forwards",
-            minWidth: 280,
-            maxWidth: 460,
-          }}
-        >
-          {/* Warm unique headline */}
-          <p
-            style={{
-              fontFamily: "'Fira Code', monospace",
-              fontSize: 12,
-              letterSpacing: "0.2em",
-              color: microLabelColor,
-              marginBottom: 20,
-              opacity: 0.8,
-              animation: "fadeSlideUp 0.6s ease 0.1s both",
-            }}
-          >
-            ✦ &nbsp; crafted with intention
-          </p>
-
-          <h1
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              lineHeight: 1.1,
-              fontSize: "clamp(34px, 4.8vw, 60px)",
-              marginBottom: 18,
-              color: headlineColor,
-              animation: "fadeSlideUp 0.7s ease 0.2s both",
-            }}
-          >
-            Good ideas deserve{" "}
-            <span
-              style={{
-                background: isDark
-                  ? "linear-gradient(90deg,#fde68a 0%,#f59e0b 40%,#fde68a 70%,#f59e0b 100%)"
-                  : "linear-gradient(90deg,#38bdf8 0%,#0e9fd6 40%,#38bdf8 70%,#0e9fd6 100%)",
-                backgroundSize: "200% auto",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                animation: "shimmerGold 4s linear 1s infinite",
-                display: "inline-block",
-              }}
-            >
-              great software.
-            </span>
+          <h1 className="mt-5 text-5xl font-extrabold tracking-tight text-ink sm:text-6xl lg:text-7xl">
+            Frank <span className="text-brand-gradient">Joe</span>
           </h1>
 
-          <p
-            style={{
-              fontFamily: "'Fira Code', monospace",
-              color: bodyColor,
-              fontSize: 13.5,
-              lineHeight: 1.9,
-              animation: "fadeSlideUp 0.7s ease 0.35s both",
-            }}
-            className="mb-7 max-w-md"
-          >
-            Whether it's your first product or your tenth — I help bring it to
-            life with clean code, thoughtful design, and a{" "}
-            <span style={{ color: isDark ? "#f59e0b" : "#0e9fd6" }}>
-              genuine care for the end result.
-            </span>
+          <p className="mt-4 text-xl font-semibold text-ink md:text-2xl">
+            Full-Stack Software Engineer
           </p>
 
-          {/* CTAs */}
-          <div
-            className="flex flex-wrap gap-4 mb-7"
-            style={{ animation: "fadeSlideUp 0.7s ease 0.5s both" }}
-          >
-            <a
-              href="https://wa.me/2347066823448"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`cta-primary ${isDark ? "" : "light"}`}
-            >
-              Build with me ↗
-            </a>
-            <a href="#projects" className={`cta-secondary ${isDark ? "" : "light"}`}>
-              View Work
-            </a>
-          </div>
+          <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
+            I build modern web applications that solve real problems, create
+            great user experiences and drive impact.
+          </p>
 
-          {/* Skill pills */}
-          <div
-            className="flex flex-wrap gap-2 mb-7"
-            style={{ animation: "fadeSlideUp 0.7s ease 0.6s both" }}
-          >
-            {SKILLS.map((s, i) => (
-              <span
-                key={s}
-                className={`skill-pill ${isDark ? "" : "light"}`}
-                style={{
-                  animation: `floatSkill ${2.5 + i * 0.3}s ease-in-out ${i * 0.12}s infinite`,
-                }}
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#projects" className="btn btn-primary">
+              View My Projects
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
               >
-                <span
-                  style={{
-                    width: 5,
-                    height: 5,
-                    borderRadius: "50%",
-                    background: isDark ? "#c4b5fd" : "#0e9fd6",
-                    opacity: 0.6,
-                    display: "inline-block",
-                    flexShrink: 0,
-                  }}
-                />
-                {s}
-              </span>
-            ))}
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </a>
+            <a href="#contact" className="btn btn-outline">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z" />
+              </svg>
+              Let&apos;s Work Together
+            </a>
           </div>
 
-          {/* Stats */}
-          <div
-            className="flex gap-3 flex-wrap"
-            style={{ animation: "fadeSlideUp 0.7s ease 0.7s both" }}
-          >
-            {[
-              ["3+", "Years Exp."],
-              ["10+", "Projects"],
-              ["5+", "Clients"],
-            ].map(([num, label]) => (
-              <div key={label} className={`stat-card ${isDark ? "" : "light"}`}>
-                <p
-                  style={{
-                    fontFamily: "'Syne', sans-serif",
-                    fontWeight: 800,
-                    fontSize: 22,
-                    color: isDark ? "#f59e0b" : "#0e9fd6",
-                    lineHeight: 1,
-                    marginBottom: 3,
-                  }}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-card text-ink transition-colors duration-200 hover:border-brand hover:text-brand"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
                 >
-                  {num}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "'Fira Code', monospace",
-                    fontSize: 10,
-                    color: statLabelColor,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {label}
-                </p>
-              </div>
+                  <path d={s.path} />
+                </svg>
+              </a>
             ))}
+            <a
+              href="mailto:frankjoe4u@gmail.com"
+              aria-label="Email"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-card text-ink transition-colors duration-200 hover:border-brand hover:text-brand"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" />
+              </svg>
+            </a>
+            <a
+              href="/Agbo_Franklin_Emeka_CV.pdf"
+              download="Agbo_Franklin_Emeka_CV.pdf"
+              className="ml-1 text-sm font-medium text-muted underline-offset-4 transition-colors duration-200 hover:text-brand hover:underline"
+            >
+              Download CV
+            </a>
           </div>
         </div>
 
-        {/* ── RIGHT — IDE Editor (always dark, like a real code editor) ── */}
-        <div
-          className="flex-1 flex justify-center items-center"
-          style={{
-            animation: "scaleIn 0.8s cubic-bezier(0.22,1,0.36,1) 0.25s both",
-            minWidth: 300,
-            maxWidth: 520,
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              borderRadius: 16,
-              overflow: "hidden",
-              border: "1px solid rgba(124,58,237,0.4)",
-              background: "rgba(10,0,31,0.82)",
-              backdropFilter: "blur(24px)",
-              animation: "glowPulse 4s ease-in-out infinite",
-              position: "relative",
-            }}
-          >
-            {/* Scanline */}
+        {/* Portrait */}
+        <div className="order-2 mx-auto w-full max-w-md lg:max-w-lg">
+          <div className="relative">
             <div
-              className="scanline-fx"
-              style={{
-                position: "absolute",
-                inset: "0 0 auto 0",
-                height: 32,
-                pointerEvents: "none",
-                zIndex: 10,
-                background:
-                  "linear-gradient(transparent,rgba(124,58,237,0.07),transparent)",
-              }}
+              className="absolute -inset-4 rounded-[2.5rem] bg-linear-to-br from-brand/40 to-brand-2/40 opacity-70 blur-3xl"
+              aria-hidden="true"
             />
 
-            {/* Title bar */}
+            <div className="relative aspect-4/5 overflow-hidden rounded-4xl border border-line shadow-2xl">
+              <Image
+                src="/pix1.jpg"
+                alt="Frank Joe, full-stack software engineer"
+                fill
+                priority
+                sizes="(min-width: 1024px) 512px, (min-width: 448px) 448px, 100vw"
+                className="object-cover object-[28%_center]"
+              />
+              <div
+                className="absolute inset-0 bg-linear-to-t from-bg/60 via-transparent to-transparent"
+                aria-hidden="true"
+              />
+            </div>
+
+            {/* Script note */}
             <div
-              style={{
-                background: "rgba(124,58,237,0.1)",
-                borderBottom: "1px solid rgba(124,58,237,0.25)",
-                padding: "10px 14px",
-                display: "flex",
-                alignItems: "center",
-                gap: 7,
-              }}
+              className={
+                script.className +
+                " pointer-events-none absolute -top-3 right-2 rotate-6 text-2xl leading-6 text-ink sm:-right-4 sm:text-3xl sm:leading-7"
+              }
+              aria-hidden="true"
             >
-              <span
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  background: "#ff5f57",
-                  display: "inline-block",
-                }}
-              />
-              <span
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  background: "#febc2e",
-                  display: "inline-block",
-                }}
-              />
-              <span
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  background: "#28c840",
-                  display: "inline-block",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "'Fira Code', monospace",
-                  fontSize: 11,
-                  color: "#64748b",
-                  marginLeft: 10,
-                  flex: 1,
-                  textAlign: "center",
-                  paddingRight: 40,
-                }}
-              >
-                portfolio — VS Code
+              <span className="block">Build</span>
+              <span className="block">Create</span>
+              <span className="block">Impact</span>
+            </div>
+
+            {/* Availability */}
+            <div className="absolute bottom-4 right-4 flex items-center gap-2 rounded-xl border border-line bg-card/90 px-3 py-2 text-xs font-medium text-ink shadow-lg backdrop-blur">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
               </span>
-            </div>
-
-            {/* File tabs */}
-            <div
-              style={{
-                display: "flex",
-                borderBottom: "1px solid rgba(124,58,237,0.2)",
-                background: "rgba(124,58,237,0.06)",
-                overflowX: "auto",
-              }}
-            >
-              {FILE_TABS.map((name, i) => (
-                <button
-                  key={name}
-                  className={`tab-btn ${activeTab === i ? "active" : ""}`}
-                  onClick={() => setActiveTab(i)}
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
-
-            {/* Editor body */}
-            <div style={{ display: "flex" }}>
-              {/* Sidebar */}
-              <div
-                style={{
-                  width: 36,
-                  background: "rgba(124,58,237,0.06)",
-                  borderRight: "1px solid rgba(124,58,237,0.15)",
-                  flexShrink: 0,
-                  paddingTop: 14,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 12,
-                }}
-              >
-                {["◈", "⬡", "⊞"].map((icon, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      fontSize: 13,
-                      color: i === 0 ? "#c4b5fd" : "rgba(124,58,237,0.3)",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {icon}
-                  </span>
-                ))}
-              </div>
-
-              {/* Code */}
-              <div
-                style={{
-                  flex: 1,
-                  padding: "16px 0",
-                  fontFamily: "'Fira Code', monospace",
-                  fontSize: 13,
-                  lineHeight: 1.9,
-                  minHeight: 300,
-                  overflowX: "auto",
-                  background: "transparent",
-                }}
-              >
-                {lines.slice(0, visibleLines).map((line, i) => {
-                  const full = "  ".repeat(line.indent) + line.text;
-                  return (
-                    <div
-                      key={`${activeTab}-${i}`}
-                      style={{
-                        display: "flex",
-                        alignItems: "baseline",
-                        paddingRight: 20,
-                        animation: "fadeIn 0.15s ease both",
-                      }}
-                    >
-                      <span className="line-num">{i + 1}</span>
-                      <span
-                        style={{
-                          color: kindColor[line.kind] ?? "#e2e8f0",
-                          whiteSpace: "pre",
-                          fontStyle:
-                            line.kind === "comment" ? "italic" : "normal",
-                        }}
-                      >
-                        {full}
-                      </span>
-                    </div>
-                  );
-                })}
-
-                {currentLineIdx < lines.length && (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      paddingRight: 20,
-                      background: "rgba(124,58,237,0.08)",
-                    }}
-                  >
-                    <span className="line-num">{visibleLines + 1}</span>
-                    <span
-                      style={{
-                        color:
-                          kindColor[lines[currentLineIdx].kind] ?? "#e2e8f0",
-                        whiteSpace: "pre",
-                        fontStyle:
-                          lines[currentLineIdx].kind === "comment"
-                            ? "italic"
-                            : "normal",
-                      }}
-                    >
-                      {(
-                        "  ".repeat(lines[currentLineIdx].indent) +
-                        lines[currentLineIdx].text
-                      ).slice(0, typedChars)}
-                      <span
-                        style={{
-                          display: "inline-block",
-                          width: 2,
-                          height: "1em",
-                          background: cursorOn ? "#fde68a" : "transparent",
-                          verticalAlign: "text-bottom",
-                          marginLeft: 1,
-                          transition: "background 0.1s",
-                        }}
-                      />
-                    </span>
-                  </div>
-                )}
-
-                {currentLineIdx >= lines.length && (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      paddingRight: 20,
-                    }}
-                  >
-                    <span className="line-num">{lines.length + 1}</span>
-                    <span
-                      style={{
-                        color: "#34d399",
-                        fontStyle: "italic",
-                        fontSize: 12,
-                      }}
-                    >
-                      // ✓ compiled successfully
-                      <span
-                        style={{
-                          display: "inline-block",
-                          width: 2,
-                          height: "1em",
-                          background: cursorOn ? "#34d399" : "transparent",
-                          verticalAlign: "text-bottom",
-                          marginLeft: 2,
-                        }}
-                      />
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Status bar */}
-            <div
-              style={{
-                background: "rgba(124,58,237,0.55)",
-                borderTop: "1px solid rgba(124,58,237,0.3)",
-                color: "rgba(255,255,255,0.8)",
-                fontFamily: "'Fira Code', monospace",
-                fontSize: 11,
-                padding: "4px 14px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
-                <span>⎇ main</span>
-                <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                  <span
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: "50%",
-                      background: "#34d399",
-                      display: "inline-block",
-                    }}
-                  />
-                  {FILE_TABS[activeTab]}
-                </span>
-              </div>
-              <div style={{ display: "flex", gap: 14 }}>
-                <span>TypeScript</span>
-                <span>UTF-8</span>
-                <span>{time}</span>
-              </div>
+              Available for
+              <br />
+              new opportunities
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </section>
   );
 }
