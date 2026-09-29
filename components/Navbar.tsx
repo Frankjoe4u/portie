@@ -8,7 +8,6 @@ const navLinks = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
-  { label: "Services", href: "#services" },
   { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
@@ -40,34 +39,34 @@ function ThemeToggle() {
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Toggle theme"
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-card text-ink transition-colors duration-200 hover:border-brand"
+      className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition-colors duration-200 hover:text-(--cyan)"
     >
       {isDark ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4"
+          className="h-[19px] w-[19px]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth={2}
+          strokeWidth={1.9}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-[19px] w-[19px]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.9}
           strokeLinecap="round"
           strokeLinejoin="round"
         >
           <circle cx="12" cy="12" r="4" />
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-        </svg>
-      ) : (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
     </button>
@@ -83,12 +82,13 @@ function Logo({ onClick }: { onClick: () => void }) {
         onClick();
       }}
       className="flex items-center gap-2.5"
+      aria-label="Frank Joe - home"
     >
-      <span className="flex h-9 w-9 select-none items-center justify-center rounded-xl bg-linear-to-br from-brand to-brand-2 text-sm font-black tracking-tight text-white shadow-lg shadow-brand/30">
+      <span className="text-hero-gradient select-none pr-0.5 text-[30px] font-black italic leading-none tracking-tighter">
         FJ
       </span>
-      <span className="text-base font-bold tracking-tight text-ink">
-        Frank Joe
+      <span className="text-[17px] font-extrabold uppercase tracking-[0.07em] text-ink">
+        Frank<span className="text-hero-gradient">Joe</span>
       </span>
     </a>
   );
@@ -150,11 +150,11 @@ export default function Navbar() {
             : "border-b border-transparent bg-transparent",
         )}
       >
-        <div className="container-x flex h-16 items-center justify-between md:h-18">
+        <div className="container-x flex h-[68px] items-center justify-between md:h-[78px]">
           <Logo onClick={() => goTo("#home")} />
 
           {/* Desktop links */}
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
+          <nav className="hidden items-center gap-9 lg:flex" aria-label="Main">
             {navLinks.map(({ label, href }) => {
               const isActive = activeSection === href.slice(1);
               return (
@@ -166,14 +166,14 @@ export default function Navbar() {
                     goTo(href);
                   }}
                   className={cn(
-                    "relative py-2 text-sm font-medium transition-colors duration-200",
-                    isActive ? "text-ink" : "text-muted hover:text-ink",
+                    "relative py-2 text-[13px] font-semibold transition-colors duration-200",
+                    isActive ? "text-ink" : "text-ink/80 hover:text-ink",
                   )}
                 >
                   {label}
                   <span
                     className={cn(
-                      "absolute inset-x-0 -bottom-0.5 h-0.5 rounded-full bg-linear-to-r from-brand to-brand-2 transition-opacity duration-200",
+                      "absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-linear-to-r from-[#00c6ff] to-[#2f7bff] transition-opacity duration-200",
                       isActive ? "opacity-100" : "opacity-0",
                     )}
                   />
@@ -183,7 +183,7 @@ export default function Navbar() {
           </nav>
 
           {/* Desktop actions */}
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden items-center gap-4 lg:flex">
             <ThemeToggle />
             <a
               href="#contact"
@@ -191,38 +191,51 @@ export default function Navbar() {
                 e.preventDefault();
                 goTo("#contact");
               }}
-              className="btn btn-primary"
+              className="btn btn-cyan px-5 py-2.5 text-[13px]"
             >
               Let&apos;s Talk
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.4}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
             </a>
           </div>
 
           {/* Mobile actions */}
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1 lg:hidden">
             <ThemeToggle />
             <button
               type="button"
               onClick={() => setIsOpen((v) => !v)}
               aria-label="Toggle menu"
               aria-expanded={isOpen}
-              className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl border border-line bg-card transition-colors duration-200 hover:border-brand"
+              className="flex h-10 w-10 flex-col items-center justify-center gap-[5px]"
             >
               <span
                 className={cn(
-                  "block h-0.5 w-5 rounded-full bg-ink transition-all duration-300",
-                  isOpen && "translate-y-2 rotate-45",
+                  "block h-0.5 w-[22px] rounded-full bg-ink transition-all duration-300",
+                  isOpen && "translate-y-[7px] rotate-45",
                 )}
               />
               <span
                 className={cn(
-                  "block h-0.5 w-5 rounded-full bg-ink transition-all duration-300",
+                  "block h-0.5 w-[22px] rounded-full bg-ink transition-all duration-300",
                   isOpen && "opacity-0",
                 )}
               />
               <span
                 className={cn(
-                  "block h-0.5 w-5 rounded-full bg-ink transition-all duration-300",
-                  isOpen && "-translate-y-2 -rotate-45",
+                  "block h-0.5 w-[22px] rounded-full bg-ink transition-all duration-300",
+                  isOpen && "-translate-y-[7px] -rotate-45",
                 )}
               />
             </button>
@@ -271,7 +284,7 @@ export default function Navbar() {
                   <span
                     className={cn(
                       "h-1.5 w-1.5 rounded-full",
-                      isActive ? "bg-brand" : "bg-line",
+                      isActive ? "bg-(--cyan)" : "bg-line",
                     )}
                   />
                   {label}
@@ -286,14 +299,14 @@ export default function Navbar() {
               e.preventDefault();
               goTo("#contact");
             }}
-            className="btn btn-primary w-full"
+            className="btn btn-cyan w-full"
           >
             Let&apos;s Talk
           </a>
           <a
             href="/Agbo_Franklin_Emeka_CV.pdf"
             download="Agbo_Franklin_Emeka_CV.pdf"
-            className="btn btn-outline mt-3 w-full"
+            className="btn btn-cyan-outline mt-3 w-full"
           >
             Download CV
           </a>

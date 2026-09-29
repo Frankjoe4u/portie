@@ -1,37 +1,72 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 
 const navLinks = [
+  { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
   { label: "Services", href: "#services" },
-  { label: "Projects", href: "#projects" },
   { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
 
-function ThemeToggle({ className = "" }: { className?: string }) {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+function cn(...parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(" ");
+}
 
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+function useMounted() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
+function ThemeToggle() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const mounted = useMounted();
+
+  if (!mounted) {
+    return <span className="block h-10 w-10" aria-hidden="true" />;
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      type="button"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Toggle theme"
-      className={`flex items-center justify-center w-10 h-10 rounded-full border border-sky-200 dark:border-purple-800/50 hover:border-sky-400 dark:hover:border-yellow-400/50 transition-colors duration-200 ${className}`}
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-card text-ink transition-colors duration-200 hover:border-brand"
     >
-      {theme === "dark" ? (
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      {isDark ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <circle cx="12" cy="12" r="4" />
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
         </svg>
       ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
@@ -39,24 +74,46 @@ function ThemeToggle({ className = "" }: { className?: string }) {
   );
 }
 
+function Logo({ onClick }: { onClick: () => void }) {
+  return (
+    <a
+      href="#home"
+      onClick={(e) => {
+        e.preventDefault();
+        onClick();
+      }}
+      className="flex items-center gap-2.5"
+    >
+      <span className="flex h-9 w-9 select-none items-center justify-center rounded-xl bg-linear-to-br from-brand to-brand-2 text-sm font-black tracking-tight text-white shadow-lg shadow-brand/30">
+        FJ
+      </span>
+      <span className="text-base font-bold tracking-tight text-ink">
+        Frank Joe
+      </span>
+    </a>
+  );
+}
+
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [activeSection, setActiveSection] = useState<string>("home");
-  const [scrolled, setScrolled] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const frame = requestAnimationFrame(onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
       { rootMargin: "-40% 0px -55% 0px" },
@@ -70,7 +127,14 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  const handleNavClick = (href: string) => {
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const goTo = (href: string) => {
     setIsOpen(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -79,100 +143,87 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-white/90 dark:bg-[#0d0020]/90 backdrop-blur-md border-b border-sky-100 dark:border-purple-900/40 shadow-lg shadow-black/10 dark:shadow-black/30"
-            : "bg-transparent"
-        }`}
+            ? "border-b border-line bg-bg/80 shadow-lg shadow-black/5 backdrop-blur-xl"
+            : "border-b border-transparent bg-transparent",
+        )}
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick("#home");
-            }}
-            className="flex items-center gap-2 group"
-          >
-            <span className="w-8 h-8 rounded-lg bg-sky-500 dark:bg-yellow-400 flex items-center justify-center text-white dark:text-black font-black text-sm select-none">
-              FJ
-            </span>
-            <span className="text-gray-900 dark:text-white font-extrabold text-lg tracking-tight group-hover:text-sky-500 dark:group-hover:text-yellow-400 transition-colors duration-200">
-              Frank
-              <span className="text-sky-500 dark:text-yellow-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
-                Joe
-              </span>
-            </span>
-          </a>
+        <div className="container-x flex h-16 items-center justify-between md:h-18">
+          <Logo onClick={() => goTo("#home")} />
 
-          {/* Desktop nav links */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Desktop links */}
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
             {navLinks.map(({ label, href }) => {
-              const sectionId = href.replace("#", "");
-              const isActive = activeSection === sectionId;
+              const isActive = activeSection === href.slice(1);
               return (
                 <a
                   key={label}
                   href={href}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleNavClick(href);
+                    goTo(href);
                   }}
-                  className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 ${
-                    isActive
-                      ? "text-white dark:text-black bg-sky-500 dark:bg-yellow-400"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5"
-                  }`}
+                  className={cn(
+                    "relative py-2 text-sm font-medium transition-colors duration-200",
+                    isActive ? "text-ink" : "text-muted hover:text-ink",
+                  )}
                 >
                   {label}
+                  <span
+                    className={cn(
+                      "absolute inset-x-0 -bottom-0.5 h-0.5 rounded-full bg-linear-to-r from-brand to-brand-2 transition-opacity duration-200",
+                      isActive ? "opacity-100" : "opacity-0",
+                    )}
+                  />
                 </a>
               );
             })}
           </nav>
 
-          {/* Desktop CTA + toggle */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Desktop actions */}
+          <div className="hidden items-center gap-3 lg:flex">
             <ThemeToggle />
             <a
-              href="/Agbo_Franklin_Emeka_CV.pdf"
-              download="Agbo_Franklin_Emeka_CV.pdf"
-              className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-white dark:text-black bg-sky-500 hover:bg-sky-400 dark:bg-yellow-400 dark:hover:bg-yellow-300 rounded-full transition-all duration-200 shadow-md shadow-sky-500/20 hover:shadow-sky-500/40 dark:shadow-yellow-400/20 dark:hover:shadow-yellow-400/40"
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                goTo("#contact");
+              }}
+              className="btn btn-primary"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              Download CV
+              Let&apos;s Talk
             </a>
           </div>
 
-          {/* Mobile controls */}
-          <div className="md:hidden flex items-center gap-2">
+          {/* Mobile actions */}
+          <div className="flex items-center gap-2 lg:hidden">
             <ThemeToggle />
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              onClick={() => setIsOpen((v) => !v)}
               aria-label="Toggle menu"
-              className="flex flex-col justify-center items-center w-10 h-10 gap-1.25 rounded-lg border border-sky-200 dark:border-purple-800/50 hover:border-sky-400 dark:hover:border-yellow-400/50 transition-colors duration-200"
+              aria-expanded={isOpen}
+              className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl border border-line bg-card transition-colors duration-200 hover:border-brand"
             >
               <span
-                className={`block w-5 h-0.5 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 ${isOpen ? "rotate-45 translate-y-1.75" : ""}`}
+                className={cn(
+                  "block h-0.5 w-5 rounded-full bg-ink transition-all duration-300",
+                  isOpen && "translate-y-2 rotate-45",
+                )}
               />
               <span
-                className={`block w-5 h-0.5 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 ${isOpen ? "opacity-0" : ""}`}
+                className={cn(
+                  "block h-0.5 w-5 rounded-full bg-ink transition-all duration-300",
+                  isOpen && "opacity-0",
+                )}
               />
               <span
-                className={`block w-5 h-0.5 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 ${isOpen ? "-rotate-45 -translate-y-1.75" : ""}`}
+                className={cn(
+                  "block h-0.5 w-5 rounded-full bg-ink transition-all duration-300",
+                  isOpen && "-translate-y-2 -rotate-45",
+                )}
               />
             </button>
           </div>
@@ -181,46 +232,47 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
-          isOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
+        className={cn(
+          "fixed inset-0 z-40 transition-opacity duration-300 lg:hidden",
+          isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
+        )}
       >
-        {/* Backdrop */}
         <div
           className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
 
-        {/* Drawer panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-72 bg-white dark:bg-[#0d0020] border-l border-gray-200 dark:border-purple-900/50 flex flex-col pt-24 pb-10 px-6 transition-transform duration-300 shadow-2xl ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={cn(
+            "absolute right-0 top-0 flex h-full w-72 flex-col border-l border-line bg-surface px-6 pb-10 pt-24 shadow-2xl transition-transform duration-300",
+            isOpen ? "translate-x-0" : "translate-x-full",
+          )}
         >
-          {/* Mobile links */}
-          <nav className="flex flex-col gap-2 flex-1">
+          <nav className="flex flex-1 flex-col gap-1.5" aria-label="Mobile">
             {navLinks.map(({ label, href }, idx) => {
-              const sectionId = href.replace("#", "");
-              const isActive = activeSection === sectionId;
+              const isActive = activeSection === href.slice(1);
               return (
                 <a
                   key={label}
                   href={href}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleNavClick(href);
+                    goTo(href);
                   }}
-                  style={{ transitionDelay: isOpen ? `${idx * 40}ms` : "0ms" }}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-all duration-200 ${
+                  style={{ transitionDelay: isOpen ? idx * 40 + "ms" : "0ms" }}
+                  className={cn(
+                    "flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium transition-all duration-300",
                     isActive
-                      ? "text-white dark:text-black bg-sky-500 dark:bg-yellow-400"
-                      : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5"
-                  } ${isOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"}`}
+                      ? "bg-brand-soft text-ink"
+                      : "text-muted hover:bg-brand-soft hover:text-ink",
+                    isOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0",
+                  )}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-white dark:bg-black" : "bg-sky-400 dark:bg-purple-500"}`}
+                    className={cn(
+                      "h-1.5 w-1.5 rounded-full",
+                      isActive ? "bg-brand" : "bg-line",
+                    )}
                   />
                   {label}
                 </a>
@@ -228,33 +280,23 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Mobile CV button */}
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              goTo("#contact");
+            }}
+            className="btn btn-primary w-full"
+          >
+            Let&apos;s Talk
+          </a>
           <a
             href="/Agbo_Franklin_Emeka_CV.pdf"
-            download
-            className="flex items-center justify-center gap-2 w-full py-3 text-sm font-bold text-white dark:text-black bg-sky-500 hover:bg-sky-400 dark:bg-yellow-400 dark:hover:bg-yellow-300 rounded-full transition-colors duration-200"
+            download="Agbo_Franklin_Emeka_CV.pdf"
+            className="btn btn-outline mt-3 w-full"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
             Download CV
           </a>
-
-          {/* Social hint */}
-          <p className="text-center text-xs text-gray-500 dark:text-gray-600 mt-4">
-            frankjoe4u@gmail.com
-          </p>
         </div>
       </div>
     </>
