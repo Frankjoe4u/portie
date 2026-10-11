@@ -50,3 +50,11 @@ export const featuredProject = {
     { title: "Booking confirmed", text: "Code generated, email sent" },
   ],
 } as const;
+
+// Homepage "Selected projects", in this order. Matched against the project
+// title (case-insensitive regex). Missing ones are skipped.
+export const selectedProjectPatterns = [
+  "smart\\s*college",
+  "med\\s*core",
+  "eve[\\s-]*(circle|care)",
+] as const;

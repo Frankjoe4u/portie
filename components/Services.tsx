@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { services } from "@/data/site";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
@@ -28,6 +29,27 @@ export default function Services() {
                 </span>
                 <h3 className="mt-4 text-base font-semibold text-ink">{s.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted">{s.text}</p>
+                {s.built.length > 0 && (
+                  <div className="mt-4 border-t border-line pt-3">
+                    <p className="kicker uppercase tracking-widest">Built</p>
+                    <ul className="mt-2 flex flex-wrap gap-1.5">
+                      {s.built.map((b) => (
+                        <li key={b.name}>
+                          {"href" in b && b.href ? (
+                            <Link
+                              href={b.href}
+                              className="chip transition-colors hover:border-(--cyan) hover:text-(--cyan)"
+                            >
+                              {b.name}
+                            </Link>
+                          ) : (
+                            <span className="chip">{b.name}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </Reveal>
           ))}

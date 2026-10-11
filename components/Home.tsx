@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { site } from "@/data/site";
 import { techIcons } from "@/data/techIcons";
 import Icon from "@/components/Icon";
+import HeroPortraits from "@/components/HeroPortraits";
 
 const heroTech = [
   { name: "Next.js", icon: techIcons.nextjs },
@@ -18,13 +18,25 @@ const shipped = [
   "Deployed to production",
 ];
 
+const chips = [
+  { label: "Next.js", pos: "left-0 top-[14%] sm:-left-4" },
+  { label: "Supabase", pos: "right-0 top-[8%] sm:-right-4" },
+  { label: "Paystack", pos: "right-0 top-[52%] sm:-right-6" },
+];
+
 export default function Home() {
   return (
-    <section id="home" className="relative overflow-hidden pb-14 pt-28 md:pb-20 md:pt-36">
+    <section id="home" className="relative overflow-hidden pb-16 pt-28 md:pb-24 md:pt-36">
       <div className="hero-glow-cyan pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="bg-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+      <p
+        aria-hidden="true"
+        className="watermark-text pointer-events-none absolute inset-x-0 top-20 select-none text-center text-[26vw] font-black uppercase leading-none tracking-tighter md:top-24 lg:text-[15rem]"
+      >
+        Frank Joe
+      </p>
 
-      <div className="container-x relative grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+      <div className="container-x relative grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
         {/* Copy */}
         <div>
           <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-card/70 px-3.5 py-1.5 text-xs font-medium text-ink">
@@ -39,7 +51,7 @@ export default function Home() {
             {site.name} / {site.role}
           </p>
 
-          <h1 className="mt-3 text-[2.15rem] font-extrabold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.4rem]">
+          <h1 className="mt-3 text-[2.15rem] font-extrabold leading-[1.06] tracking-tight text-ink sm:text-5xl lg:text-[3.5rem]">
             I build production-ready web applications and{" "}
             <span className="text-hero-gradient">business systems.</span>
           </h1>
@@ -102,21 +114,45 @@ export default function Home() {
         </div>
 
         {/* Visual */}
-        <div className="relative mx-auto w-full max-w-sm lg:max-w-md">
-          <div className="hex mx-auto w-[15rem] bg-linear-to-br from-[#00c6ff] via-[#2f7bff] to-[#8b5cf6] p-[3px] sm:w-[19rem] lg:w-[22rem]">
-            <div className="hex relative aspect-square w-full bg-surface">
-              <Image
-                src="/pix1.jpg"
-                alt="Portrait of Frank Joe"
-                fill
-                priority
-                sizes="(min-width: 1024px) 352px, (min-width: 640px) 304px, 240px"
-                className="object-cover"
-              />
+        <div className="relative mx-auto w-full max-w-md lg:max-w-xl">
+          <div
+            className="pointer-events-none absolute left-1/2 top-[40%] h-[80%] w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--cyan-glow) blur-3xl"
+            aria-hidden="true"
+          />
+
+          <div className="relative mx-auto w-[17rem] sm:w-[25rem] lg:w-[29rem]">
+            {/* offset outline hex */}
+            <div
+              className="hex absolute inset-0 translate-x-5 translate-y-4 rotate-[8deg] bg-linear-to-br from-[#00c6ff] to-[#8b5cf6] p-[2px] opacity-60"
+              aria-hidden="true"
+            >
+              <div className="hex h-full w-full bg-bg" />
             </div>
+
+            {/* main portrait */}
+            <div className="relative drop-shadow-[0_24px_50px_var(--cyan-glow)]">
+              <div className="hex bg-linear-to-br from-[#00c6ff] via-[#2f7bff] to-[#8b5cf6] p-[5px]">
+                <div className="hex relative aspect-square w-full bg-surface">
+                  <HeroPortraits />
+                </div>
+              </div>
+            </div>
+
+            {chips.map((c) => (
+              <span
+                key={c.label}
+                aria-hidden="true"
+                className={
+                  "float-slow absolute hidden rounded-xl border border-line bg-card/95 px-3 py-1.5 text-xs font-bold text-ink shadow-lg backdrop-blur sm:block " +
+                  c.pos
+                }
+              >
+                {c.label}
+              </span>
+            ))}
           </div>
 
-          <div className="float-slow relative z-10 -mt-8 w-full rounded-2xl border border-line bg-card/95 p-4 shadow-xl backdrop-blur sm:-mt-12 sm:p-5">
+          <div className="relative z-10 -mt-10 w-full rounded-2xl border border-line bg-card/95 p-4 shadow-xl backdrop-blur sm:-mt-14 sm:p-5">
             <div className="flex items-center justify-between">
               <p className="kicker">production / 5g-hotel</p>
               <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-500">

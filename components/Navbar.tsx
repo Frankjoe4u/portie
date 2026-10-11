@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { navLinks, site, socials } from "@/data/site";
@@ -75,8 +76,14 @@ function Logo({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
       className="flex items-center gap-2.5"
       aria-label="Frank Joe - home"
     >
-      <span className="text-hero-gradient select-none pr-0.5 text-[28px] font-black italic leading-none tracking-tighter">
-        FJ
+      <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full ring-2 ring-(--cyan) ring-offset-2 ring-offset-bg md:h-10 md:w-10">
+        <Image
+          src="/dp.jpg"
+          alt=""
+          fill
+          sizes="40px"
+          className="object-cover object-[50%_16%] contrast-[1.08] saturate-[1.1]"
+        />
       </span>
       <span className="text-[16px] font-extrabold uppercase tracking-[0.07em] text-ink">
         Frank<span className="text-hero-gradient">Joe</span>

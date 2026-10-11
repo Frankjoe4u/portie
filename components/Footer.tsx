@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { navLinks, site, socials } from "@/data/site";
 
 export default function Footer() {
@@ -6,7 +7,10 @@ export default function Footer() {
       <div className="container-x">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <a href="/#home" className="inline-block" aria-label="Frank Joe - back to top">
+            <a href="/#home" className="inline-flex items-center gap-3" aria-label="Frank Joe - back to top">
+              <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full ring-2 ring-(--cyan) ring-offset-2 ring-offset-surface">
+                <Image src="/pix2.jpg" alt="" fill sizes="44px" className="object-cover object-[50%_22%] contrast-[1.08] saturate-[1.1]" />
+              </span>
               <span className="text-lg font-extrabold uppercase tracking-[0.07em] text-ink">
                 Frank<span className="text-hero-gradient">Joe</span>
               </span>

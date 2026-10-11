@@ -1,11 +1,13 @@
 import { aboutAreas, journey, site } from "@/data/site";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
+import Watermark from "@/components/Watermark";
 
 export default function About() {
   return (
-    <section id="about" className="border-t border-line bg-bg py-16 md:py-24">
-      <div className="container-x grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+    <section id="about" className="relative overflow-hidden border-t border-line bg-bg py-16 md:py-24">
+      <Watermark src="/pix.jpg" position="50% 30%" fade="left" className="inset-y-0 right-0 hidden w-[42%] lg:block" />
+      <div className="container-x relative grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
         <Reveal>
           <p className="eyebrow">About</p>
           <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink md:text-4xl">

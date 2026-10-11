@@ -5,6 +5,7 @@ import emailjs from "@emailjs/browser";
 import { budgetRanges, projectTypes, site, socials } from "@/data/site";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
+import Watermark from "@/components/Watermark";
 import SocialIcons from "./SocialIcons";
 
 const SERVICE_ID = "service_ftquwmc";
@@ -134,8 +135,9 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="hero-glow border-t border-line bg-bg py-16 md:py-24">
-      <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-start lg:gap-14">
+    <section id="contact" className="hero-glow relative overflow-hidden border-t border-line bg-bg py-16 md:py-24">
+      <Watermark src="/pix2.jpg" position="50% 25%" fade="right" className="inset-y-0 left-0 hidden w-[38%] lg:block" />
+      <div className="container-x relative grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-start lg:gap-14">
         <Reveal>
           <p className="eyebrow">Contact</p>
           <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink md:text-4xl">

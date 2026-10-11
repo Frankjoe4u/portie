@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   PROJECT_CATEGORIES,
   categoryLabel,
@@ -9,6 +9,7 @@ import {
 import { techIcons } from "@/data/techIcons";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
+import { selectedProjectPatterns } from "@/data/projects";
 
 export type ProjectDisplay = {
   id: string;
@@ -24,7 +25,7 @@ export type ProjectDisplay = {
 type Filter = "all" | ProjectCategory;
 
 const SELECTED_COUNT = 3;
-const MORE_INITIAL = 6;
+const FILTER_MIN = 6;
 
 function cn(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -123,23 +124,136 @@ function SelectedCard({ p }: { p: ProjectDisplay }) {
   );
 }
 
-function CompactCard({ p }: { p: ProjectDisplay }) {
+function CarouselCard({ p }: { p: ProjectDisplay }) {
   return (
-    <article className="card group flex gap-3.5 p-3">
-      <div className="h-20 w-28 shrink-0 overflow-hidden rounded-lg border border-line bg-surface sm:h-24 sm:w-32">
+    <article className="card group relative flex h-full flex-col overflow-hidden p-0 hover:-translate-y-1">
+      <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-surface">
         <ProjectImage src={p.image} title={p.title} />
-      </div>
-      <div className="flex min-w-0 flex-1 flex-col">
-        {p.category && <p className="kicker uppercase tracking-widest">{categoryLabel(p.category)}</p>}
-        <h4 className="truncate text-sm font-bold text-ink">{p.title}</h4>
-        {p.description && (
-          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">{p.description}</p>
+        <div
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent"
+          aria-hidden="true"
+        />
+        {p.category && (
+          <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur">
+            {categoryLabel(p.category)}
+          </span>
         )}
-        <div className="mt-auto pt-2">
+      </div>
+      <div className="flex flex-1 flex-col p-4">
+        <h4 className="text-base font-bold text-ink">{p.title}</h4>
+        {p.description && (
+          <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-muted">{p.description}</p>
+        )}
+        <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Technologies">
+          {p.tech.slice(0, 3).map((t) => (
+            <li key={t} className="chip">
+              {t}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-auto pt-4">
           <ProjectLinks p={p} />
         </div>
       </div>
     </article>
+  );
+}
+
+function Carousel({ items, resetKey }: { items: ProjectDisplay[]; resetKey: string }) {
+  const ref = useRef<HTMLUListElement>(null);
+  const [pos, setPos] = useState({ start: true, end: false, progress: 0 });
+
+  const update = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setPos({
+      start: el.scrollLeft <= 4,
+      end: el.scrollLeft >= max - 4,
+      progress: max > 0 ? el.scrollLeft / max : 0,
+    });
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.scrollTo({ left: 0 });
+    update();
+    const onResize = () => update();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [resetKey, items.length, update]);
+
+  const scrollByPage = (dir: 1 | -1) => {
+    const el = ref.current;
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: reduce ? "auto" : "smooth" });
+  };
+
+  const arrow =
+    "flex h-11 w-11 items-center justify-center rounded-full border border-line bg-card text-ink transition-all duration-200 hover:border-(--cyan) hover:text-(--cyan) disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-line disabled:hover:text-ink";
+
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-4">
+        <div
+          className="h-1 w-24 overflow-hidden rounded-full bg-line sm:w-40"
+          role="presentation"
+          aria-hidden="true"
+        >
+          <div
+            className="h-full rounded-full bg-linear-to-r from-[#00c6ff] to-[#8b5cf6] transition-[width] duration-200"
+            style={{ width: Math.max(18, 18 + pos.progress * 82) + "%" }}
+          />
+        </div>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => scrollByPage(-1)}
+            disabled={pos.start}
+            aria-label="Previous projects"
+            className={arrow}
+          >
+            <Icon name="arrow" className="h-4 w-4 rotate-180" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByPage(1)}
+            disabled={pos.end}
+            aria-label="Next projects"
+            className={arrow}
+          >
+            <Icon name="arrow" className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      <ul
+        ref={ref}
+        onScroll={update}
+        tabIndex={0}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="More projects"
+        onKeyDown={(e) => {
+          if (e.key === "ArrowRight") {
+            e.preventDefault();
+            scrollByPage(1);
+          } else if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            scrollByPage(-1);
+          }
+        }}
+        className="snap-row -mx-5 mt-5 flex gap-4 overflow-x-auto scroll-smooth px-5 pb-6 pt-1 [scroll-padding-inline:1.25rem] motion-reduce:scroll-auto md:mx-0 md:px-0 md:[scroll-padding-inline:0]"
+      >
+        {items.map((p) => (
+          <li key={p.id} className="w-[78vw] max-w-[22rem] shrink-0 sm:w-[20rem]">
+            <CarouselCard p={p} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -151,7 +265,6 @@ export default function ProjectsClient({
   error?: boolean;
 }) {
   const [filter, setFilter] = useState<Filter>("all");
-  const [showAll, setShowAll] = useState(false);
 
   if (error) {
     return (
@@ -172,22 +285,25 @@ export default function ProjectsClient({
 
   if (projects.length === 0) return null;
 
-  const selected = projects.slice(0, SELECTED_COUNT);
-  const more = projects.slice(SELECTED_COUNT);
+  // Pinned projects first (in the order set in data/projects.ts), then pad
+  // with the next projects so the section always has a full row.
+  const pinned: ProjectDisplay[] = [];
+  for (const pattern of selectedProjectPatterns) {
+    const re = new RegExp(pattern, "i");
+    const hit = projects.find((p) => re.test(p.title) && !pinned.includes(p));
+    if (hit) pinned.push(hit);
+  }
+  const selected = [
+    ...pinned,
+    ...projects.filter((p) => !pinned.includes(p)).slice(0, Math.max(0, SELECTED_COUNT - pinned.length)),
+  ];
+  const more = projects.filter((p) => !selected.includes(p));
 
   const presentCategories = PROJECT_CATEGORIES.filter((c) =>
     more.some((p) => p.category === c.value),
   );
-  // Filtering only appears when it genuinely helps discovery.
-  const showFilters = more.length > MORE_INITIAL && presentCategories.length > 1;
-
+  const showFilters = more.length > FILTER_MIN && presentCategories.length > 1;
   const filtered = filter === "all" ? more : more.filter((p) => p.category === filter);
-  const visible = showAll ? filtered : filtered.slice(0, MORE_INITIAL);
-
-  const changeFilter = (value: Filter) => {
-    setFilter(value);
-    setShowAll(false);
-  };
 
   return (
     <>
@@ -205,55 +321,45 @@ export default function ProjectsClient({
       </div>
 
       {more.length > 0 && (
-        <div className="mt-14">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <p className="eyebrow">More projects</p>
-            {showFilters && (
-              <div
-                role="group"
-                aria-label="Filter more projects"
-                className="-mx-5 overflow-x-auto px-5 pb-1 lg:mx-0 lg:px-0 lg:pb-0"
-              >
-                <div className="flex w-max gap-1 rounded-full border border-line bg-card p-1">
-                  {[{ value: "all" as Filter, label: "All" }, ...presentCategories].map((f) => (
-                    <button
-                      key={f.value}
-                      type="button"
-                      aria-pressed={filter === f.value}
-                      onClick={() => changeFilter(f.value as Filter)}
-                      className={cn(
-                        "whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200",
-                        filter === f.value
-                          ? "bg-linear-to-r from-brand to-brand-2 text-white shadow-md shadow-brand/30"
-                          : "text-muted hover:text-ink",
-                      )}
-                    >
-                      {f.label}
-                    </button>
-                  ))}
-                </div>
+        <div className="mt-16">
+          <Reveal>
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="eyebrow">More projects</p>
+                <p className="mt-1 text-sm text-muted">Swipe or use the arrows to browse.</p>
               </div>
-            )}
-          </div>
-
-          <div className="mt-5 grid gap-3 md:grid-cols-2">
-            {visible.map((p) => (
-              <CompactCard key={p.id} p={p} />
-            ))}
-          </div>
-
-          {filtered.length > MORE_INITIAL && (
-            <div className="mt-8 text-center">
-              <button
-                type="button"
-                onClick={() => setShowAll((v) => !v)}
-                aria-expanded={showAll}
-                className="btn btn-outline"
-              >
-                {showAll ? "Show Less" : "View All Projects"}
-              </button>
+              {showFilters && (
+                <div
+                  role="group"
+                  aria-label="Filter more projects"
+                  className="-mx-5 overflow-x-auto px-5 pb-1 lg:mx-0 lg:px-0 lg:pb-0"
+                >
+                  <div className="flex w-max gap-1 rounded-full border border-line bg-card p-1">
+                    {[{ value: "all" as Filter, label: "All" }, ...presentCategories].map((f) => (
+                      <button
+                        key={f.value}
+                        type="button"
+                        aria-pressed={filter === f.value}
+                        onClick={() => setFilter(f.value as Filter)}
+                        className={cn(
+                          "whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200",
+                          filter === f.value
+                            ? "bg-linear-to-r from-brand to-brand-2 text-white shadow-md shadow-brand/30"
+                            : "text-muted hover:text-ink",
+                        )}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </Reveal>
+
+          <div className="mt-6">
+            <Carousel items={filtered} resetKey={filter} />
+          </div>
         </div>
       )}
     </>

@@ -114,42 +114,50 @@ export const experience = [
   },
 ] as const;
 
+export type BuiltItem = { name: string; href?: string };
+
 export const services = [
   {
     title: "SaaS Platforms",
     text: "Multi-user applications with authentication, subscriptions, dashboards and role-based access.",
     color: "#3b73ff",
     icon: "layers",
+    built: [{ name: "StockPilot" },{ name: "SmartCollege" }],
   },
   {
     title: "Business Management Systems",
     text: "Hotel, hospital, school, inventory, CRM and internal business platforms.",
     color: "#6366f1",
     icon: "briefcase",
+    built: [{ name: "5G Hotel", href: "/projects/5g-hotel" },{ name: "MedCore" },{ name: "PharmaLab" },{ name: "FabSmile DentalCare" }],
   },
   {
     title: "Payment Systems",
     text: "Paystack/Flutterwave integrations, payment verification, webhooks and transaction workflows.",
     color: "#14b8a6",
     icon: "card",
+    built: [{ name: "5G Hotel (Paystack)", href: "/projects/5g-hotel" }],
   },
   {
     title: "Admin & Analytics Dashboards",
     text: "Operational dashboards with permissions, real-time information and reporting.",
     color: "#0ea5e9",
     icon: "chart",
+    built: [{ name: "5G Hotel dashboards", href: "/projects/5g-hotel" },{ name: "MedCore" }],
   },
   {
     title: "AI-Powered Applications",
     text: "AI assistants, intelligent search, automation and AI-driven workflows.",
     color: "#d946ef",
     icon: "spark",
+    built: [],
   },
   {
     title: "APIs & Backend Systems",
     text: "Secure APIs, database architecture, authentication and backend services.",
     color: "#f59e0b",
     icon: "server",
+    built: [{ name: "5G Hotel booking & webhooks", href: "/projects/5g-hotel" },{ name: "Portfolio CMS & blog API" }],
   },
 ] as const;
 
