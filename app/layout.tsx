@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
+import { site } from "@/data/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,32 +17,38 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f7fd" },
+    { media: "(prefers-color-scheme: dark)", color: "#050816" },
+  ],
+};
+
 export const metadata: Metadata = {
-  title: "frankjoe",
-  description: "my portfolio website",
+  metadataBase: new URL(site.url),
+  title: {
+    default: site.title,
+    template: "%s | Frank Joe",
+  },
+  description: site.description,
+  keywords: [...site.keywords],
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "Frank Joe | Software Developer",
-    description:
-      "Software developer building modern web experiences with Next.js, TypeScript, and Tailwind CSS.",
-    url: "https://fjoe.vercel.app",
-    siteName: "Frank Joe",
-    images: [
-      {
-        url: "https://fjoe.vercel.app/pix1.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Frank Joe | Software Developer",
-      },
-    ],
+    title: site.title,
+    description: site.description,
+    url: site.url,
+    siteName: site.name,
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Frank Joe | Software Developer",
-    description:
-      "Software developer building modern web experiences with Next.js, TypeScript, and Tailwind CSS.",
-    images: ["https://fjoe.vercel.app/pix1.jpg"],
+    title: site.title,
+    description: site.description,
+    creator: "@FJ_AirMayCar",
   },
 };
 
@@ -56,7 +63,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <head>
+        <noscript>
+          <style>{"[data-reveal]{opacity:1!important;transform:none!important}"}</style>
+        </noscript>
+      </head>
+      <body id="top" className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>

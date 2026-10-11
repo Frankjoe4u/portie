@@ -42,14 +42,20 @@ function Cover({ src, tag }: { src?: string; tag: string }) {
   );
 }
 
-export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
+export default function BlogClient({
+  posts,
+  error = false,
+}: {
+  posts: BlogPostDisplay[];
+  error?: boolean;
+}) {
   const [showAll, setShowAll] = useState(false);
   const visible = showAll ? posts : posts.slice(0, INITIAL_COUNT);
 
   return (
     <section
       id="blog"
-      className="scroll-mt-16 border-t border-line bg-bg py-16 md:py-20"
+      className="border-t border-line bg-bg py-16 md:py-24"
     >
       <div className="container-x">
         <div>
@@ -63,7 +69,19 @@ export default function BlogClient({ posts }: { posts: BlogPostDisplay[] }) {
           </p>
         </div>
 
-        {posts.length === 0 ? (
+        {error ? (
+          <div role="alert" className="mt-10 rounded-2xl border border-dashed border-line p-8 text-center">
+            <p className="text-sm font-semibold text-ink">Articles couldn&apos;t be loaded right now.</p>
+            <p className="mt-1 text-xs text-muted">Check your connection and try again.</p>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="btn btn-outline mt-4 px-4 py-2 text-xs"
+            >
+              Reload
+            </button>
+          </div>
+        ) : posts.length === 0 ? (
           <p className="mt-10 rounded-2xl border border-dashed border-line py-14 text-center text-sm text-muted">
             New articles are coming soon.
           </p>

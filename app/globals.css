@@ -187,3 +187,82 @@ body {
       radial-gradient(45% 45% at 4% 96%, var(--brand-soft), transparent 70%);
   }
 }
+
+/* ---------- Professional polish layer ---------- */
+html {
+  scroll-padding-top: 5rem;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+
+::selection {
+  background: var(--brand-soft);
+}
+
+/* Scroll reveal */
+[data-reveal] {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-reveal="out"] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Subtle technical grid behind the hero */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(70% 60% at 70% 35%, #000 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(70% 60% at 70% 35%, #000 0%, transparent 75%);
+  opacity: 0.45;
+}
+
+.hex {
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+}
+
+.kicker {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  [data-reveal="out"] {
+    opacity: 1;
+    transform: none;
+  }
+}

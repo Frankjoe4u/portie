@@ -20,8 +20,21 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return {};
   return {
-    title: post.title + " | Frank Joe",
+    title: post.title,
     description: post.excerpt,
+    alternates: { canonical: "/blog/" + slug },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: "/blog/" + slug,
+      type: "article",
+      ...(post.coverImage ? { images: [post.coverImage] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+    },
   };
 }
 
