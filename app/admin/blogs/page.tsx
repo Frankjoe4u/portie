@@ -193,12 +193,18 @@ export default function AdminBlogsPage() {
               <FormField label="Tag">
                 <input
                   required
-                  placeholder="Next.js / PWA"
+                  placeholder="Engineering"
+                  list="blog-categories"
                   value={form.tag}
                   onChange={(e) => setForm((f) => ({ ...f, tag: e.target.value }))}
                   style={inputStyle}
                 />
               </FormField>
+              <datalist id="blog-categories">
+                {["Engineering", "Next.js", "React", "Backend", "Architecture", "Security", "DevOps", "Lessons Learned"].map((c) => (
+                  <option key={c} value={c} />
+                ))}
+              </datalist>
               <FormField label="Tag Color">
                 <input
                   type="color"
@@ -420,4 +426,3 @@ const inputStyle: React.CSSProperties = {
   color: "#fff",
   fontSize: 14,
 };
-

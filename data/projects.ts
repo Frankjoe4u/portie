@@ -8,7 +8,7 @@ export const featuredProject = {
   badge: "Featured \u00b7 Production system",
   // Fill these in when ready. Buttons only render when a value is present.
   liveUrl: "",
-  caseStudy: false,
+  caseStudy: true,
   story: [
     {
       label: "Problem",

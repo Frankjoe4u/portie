@@ -1,17 +1,16 @@
-import { Children, isValidElement } from "react";
+import { Children, isValidElement, type ReactNode } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import { slugifyHeading, uniqueId } from "@/lib/blog";
 
-const components: Components = {
-  h1: ({ children }) => (
-    <h2 className="mb-4 mt-12 text-2xl font-extrabold leading-snug text-ink">
-      {children}
-    </h2>
-  ),
-  h2: ({ children }) => (
-    <h2 className="mb-4 mt-12 text-2xl font-extrabold leading-snug text-ink">
-      {children}
-    </h2>
-  ),
+function nodeText(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(nodeText).join("");
+  if (isValidElement(node)) return nodeText((node.props as { children?: ReactNode }).children);
+  return "";
+}
+
+const baseComponents: Components = {
   h3: ({ children }) => (
     <h3 className="mb-3 mt-8 text-xl font-bold text-brand">{children}</h3>
   ),
@@ -98,5 +97,33 @@ const components: Components = {
 };
 
 export default function BlogMarkdown({ content }: { content: string }) {
-  return <ReactMarkdown components={components}>{content.trim()}</ReactMarkdown>;
+  // Fresh counter per render so duplicate headings get unique anchors that
+  // match the table of contents.
+  const seen = new Map<string, number>();
+  const heading = (children: ReactNode) => {
+    const id = uniqueId(slugifyHeading(nodeText(children)), seen);
+    return (
+      <h2
+        id={id}
+        className="mb-4 mt-12 scroll-mt-24 text-2xl font-extrabold leading-snug text-ink"
+      >
+        {children}
+      </h2>
+    );
+  };
+
+  const components: Components = {
+    ...baseComponents,
+    h1: ({ children }) => heading(children),
+    h2: ({ children }) => heading(children),
+  };
+
+  return (
+    <ReactMarkdown
+      components={components}
+      rehypePlugins={[[rehypeHighlight, { detect: false, ignoreMissing: true }]]}
+    >
+      {content.trim()}
+    </ReactMarkdown>
+  );
 }

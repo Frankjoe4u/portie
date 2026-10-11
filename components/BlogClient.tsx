@@ -50,7 +50,13 @@ export default function BlogClient({
   error?: boolean;
 }) {
   const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? posts : posts.slice(0, INITIAL_COUNT);
+  const [category, setCategory] = useState("all");
+
+  const categories = Array.from(new Set(posts.map((p) => p.tag)));
+  // Filtering only appears once it helps readers find things.
+  const showFilters = posts.length > INITIAL_COUNT && categories.length > 1;
+  const filtered = category === "all" ? posts : posts.filter((p) => p.tag === category);
+  const visible = showAll ? filtered : filtered.slice(0, INITIAL_COUNT);
 
   return (
     <section
@@ -68,6 +74,32 @@ export default function BlogClient({
             web.
           </p>
         </div>
+
+        {showFilters && !error && (
+          <div role="group" aria-label="Filter articles by category" className="-mx-5 mt-8 overflow-x-auto px-5 pb-1">
+            <div className="flex w-max gap-1 rounded-full border border-line bg-card p-1">
+              {["all", ...categories].map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  aria-pressed={category === c}
+                  onClick={() => {
+                    setCategory(c);
+                    setShowAll(false);
+                  }}
+                  className={
+                    "whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 " +
+                    (category === c
+                      ? "bg-linear-to-r from-brand to-brand-2 text-white shadow-md shadow-brand/30"
+                      : "text-muted hover:text-ink")
+                  }
+                >
+                  {c === "all" ? "All" : c}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {error ? (
           <div role="alert" className="mt-10 rounded-2xl border border-dashed border-line p-8 text-center">
@@ -134,7 +166,7 @@ export default function BlogClient({
           </div>
         )}
 
-        {posts.length > INITIAL_COUNT && (
+        {filtered.length > INITIAL_COUNT && (
           <div className="mt-10 text-center">
             <button
               type="button"

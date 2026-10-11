@@ -266,3 +266,22 @@ body {
     transform: none;
   }
 }
+
+/* ---------- Phase 2: code highlighting + gallery ---------- */
+.hljs { color: #e2e8f0; }
+.hljs-comment, .hljs-quote { color: #7c8aa8; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-built_in { color: #c4a1ff; }
+.hljs-string, .hljs-doctag, .hljs-regexp, .hljs-template-variable { color: #8bdc9b; }
+.hljs-number, .hljs-symbol, .hljs-bullet, .hljs-attr, .hljs-attribute { color: #ffb86b; }
+.hljs-title, .hljs-section, .hljs-title.function_, .hljs-title.class_ { color: #6cb6ff; }
+.hljs-tag, .hljs-name, .hljs-type, .hljs-variable, .hljs-params { color: #ff9ca8; }
+.hljs-meta, .hljs-link { color: #5fd0e0; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: 700; }
+
+.snap-row {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.snap-row::-webkit-scrollbar { display: none; }
+.snap-row > * { scroll-snap-align: start; }

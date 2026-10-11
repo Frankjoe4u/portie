@@ -1,12 +1,28 @@
+import Image from "next/image";
 import Link from "next/link";
 import { featuredProject as p } from "@/data/projects";
 import Icon from "@/components/Icon";
 import Reveal from "@/components/Reveal";
+import { loadGallery } from "@/lib/gallery";
 
 export default function FeaturedProject() {
+  // First real screenshot, if one has been added to public/5g-hotel.
+  const cover = loadGallery()[0];
+
   return (
     <Reveal>
       <article className="card overflow-hidden p-0 hover:bg-card">
+        {cover && (
+          <div className="relative aspect-[21/9] w-full border-b border-line bg-surface">
+            <Image
+              src={cover.src}
+              alt={p.title + ": " + cover.title}
+              fill
+              sizes="(min-width: 1152px) 1152px, 100vw"
+              className="object-cover object-top"
+            />
+          </div>
+        )}
         <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
           {/* Story */}
           <div className="p-6 md:p-9">
