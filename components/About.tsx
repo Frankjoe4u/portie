@@ -35,7 +35,7 @@ export default function About() {
             rel="noopener noreferrer"
             className="btn btn-primary mt-8"
           >
-            Learn More About Me
+            View My CV
             <Icon name="arrow" />
           </a>
         </Reveal>

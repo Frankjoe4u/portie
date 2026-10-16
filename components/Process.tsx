@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 
-type Step = { title: string; text: string; icon: ReactNode };
+type Step = { title: string; text: string; outcome: string; icon: ReactNode };
 
 const steps: Step[] = [
   {
     title: "Discover",
-    text: "Understand your needs",
+    text: "Understand the business, its users and its constraints before a single line of code is written.",
+    outcome: "Clear scope & priorities",
     icon: (
       <>
         <circle cx="11" cy="11" r="7" />
@@ -15,7 +16,8 @@ const steps: Step[] = [
   },
   {
     title: "Design",
-    text: "Plan the best approach",
+    text: "Map the data model, user flows and system architecture so the build has a solid foundation.",
+    outcome: "Architecture & UI plan",
     icon: (
       <>
         <path d="M12 20h9" />
@@ -25,12 +27,14 @@ const steps: Step[] = [
   },
   {
     title: "Build",
-    text: "Write clean, scalable code",
+    text: "Ship typed, modular code in small increments so progress is visible and easy to review.",
+    outcome: "Working features, early",
     icon: <path d="m16 18 6-6-6-6M8 6l-6 6 6 6" />,
   },
   {
     title: "Test",
-    text: "Ensure quality & security",
+    text: "Verify payments, permissions and edge cases, and harden every API route before release.",
+    outcome: "A secure, verified release",
     icon: (
       <>
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -40,7 +44,8 @@ const steps: Step[] = [
   },
   {
     title: "Deploy",
-    text: "Launch to production",
+    text: "Go live on production infrastructure with environment config, domains and HTTPS in place.",
+    outcome: "A live production system",
     icon: (
       <>
         <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
@@ -52,7 +57,8 @@ const steps: Step[] = [
   },
   {
     title: "Maintain",
-    text: "Keep it running",
+    text: "Fix, refine and scale the system as the business and its users grow.",
+    outcome: "Ongoing support",
     icon: (
       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
     ),
@@ -63,62 +69,63 @@ export default function Process() {
   return (
     <section
       id="process"
-      className="scroll-mt-16 border-t border-line bg-bg py-16 md:py-20"
+      className="relative scroll-mt-16 overflow-hidden border-t border-line bg-surface/40 py-16 md:py-24"
     >
-      <div className="container-x grid gap-10 lg:grid-cols-[1fr_3fr] lg:items-center lg:gap-8">
-        <div>
+      <div
+        className="pointer-events-none absolute left-1/2 top-0 h-64 w-[44rem] -translate-x-1/2 rounded-full bg-(--cyan-glow) opacity-40 blur-3xl"
+        aria-hidden="true"
+      />
+      <div className="container-x relative">
+        <div className="mx-auto max-w-2xl text-center">
           <p className="eyebrow">My Process</p>
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink md:text-3xl">
+          <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink md:text-4xl">
             How I Work
           </h2>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
-            A simple, effective process to turn ideas into great products.
+          <p className="mt-3 text-sm leading-relaxed text-muted md:text-base">
+            A disciplined, transparent process. Every stage ends with something concrete you can
+            review, so there are no surprises at launch.
           </p>
         </div>
 
-        <ol className="relative lg:grid lg:grid-cols-6 lg:gap-2">
-          {/* horizontal connector (desktop) */}
-          <div
-            className="absolute left-[8.3%] right-[8.3%] top-5 hidden h-px bg-line lg:block"
-            aria-hidden="true"
-          />
-
+        <ol className="relative mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {steps.map((s, i) => (
-            <li
-              key={s.title}
-              className="relative flex gap-4 pb-8 last:pb-0 lg:flex-col lg:items-center lg:gap-0 lg:pb-0 lg:text-center"
-            >
-              {/* vertical connector (mobile) */}
-              {i < steps.length - 1 && (
+            <li key={s.title} className="group relative">
+              <div className="card relative h-full overflow-hidden p-6 transition-all duration-300 hover:-translate-y-1">
                 <span
-                  className="absolute left-5 top-10 h-[calc(100%-2.5rem)] w-px bg-line lg:hidden"
-                  aria-hidden="true"
-                />
-              )}
-
-              <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brand/50 bg-card text-brand shadow-lg shadow-brand/10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4.5 w-4.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  className="pointer-events-none absolute -right-2 -top-4 select-none font-mono text-7xl font-black leading-none text-brand/10 transition-colors duration-300 group-hover:text-brand/20"
                   aria-hidden="true"
                 >
-                  {s.icon}
-                </svg>
-              </span>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
 
-              <div className="lg:mt-4">
-                <h3 className="text-sm font-bold text-ink">
-                  {i + 1}. {s.title}
-                </h3>
-                <p className="mt-1 text-xs leading-snug text-muted lg:px-1">
-                  {s.text}
-                </p>
+                <span className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-brand to-brand-2 text-white shadow-lg shadow-brand/25">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    {s.icon}
+                  </svg>
+                </span>
+
+                <p className="kicker mt-5 uppercase tracking-widest">Step {i + 1}</p>
+                <h3 className="mt-1 text-lg font-bold tracking-tight text-ink">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{s.text}</p>
+
+                <div className="mt-5 flex items-center gap-2 border-t border-line pt-4 text-xs font-semibold text-ink">
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-500">
+                    <svg viewBox="0 0 24 24" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="m5 12 5 5L20 7" />
+                    </svg>
+                  </span>
+                  {s.outcome}
+                </div>
               </div>
             </li>
           ))}

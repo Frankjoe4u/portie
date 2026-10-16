@@ -75,7 +75,7 @@ export default async function BlogPostPage({
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
-    author: { "@type": "Person", name: site.name, url: site.url },
+    author: { "@type": "Person", name: site.legalName, alternateName: site.name, url: site.url },
     datePublished: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,
     dateModified: post.updatedAt ? new Date(post.updatedAt).toISOString() : undefined,
     mainEntityOfPage: url,

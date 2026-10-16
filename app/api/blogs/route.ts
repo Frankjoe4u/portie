@@ -6,9 +6,15 @@ import { slugify } from "@/lib/slugify";
 import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
-  await dbConnect();
-
   const showAll = request.nextUrl.searchParams.get("all") === "true";
+
+  // Unpublished drafts are admin-only.
+  if (showAll) {
+    const unauthorized = await requireAdmin();
+    if (unauthorized) return unauthorized;
+  }
+
+  await dbConnect();
 
   const query = showAll ? {} : { published: true };
   const posts = await BlogPost.find(query).sort({ createdAt: -1 });

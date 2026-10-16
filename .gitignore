@@ -43,3 +43,7 @@ next-env.d.ts
 .vercel
 .env*
 _backup_phase1/
+_backup*/
+*.bak
+*.old
+blogclient-debug.txt

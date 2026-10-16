@@ -1,3 +1,4 @@
+import HotelHero from "@/components/HotelHero";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -132,6 +133,11 @@ export default function FiveGHotelCaseStudy() {
               </a>
             </div>
           </header>
+
+          <HotelHero
+            priority
+            className="mt-10 aspect-[4/3] w-full rounded-2xl border border-line shadow-2xl sm:aspect-[16/9] lg:aspect-[21/9]"
+          />
 
           <div className="mt-14 grid gap-12 lg:grid-cols-[13rem_1fr] lg:gap-14">
             {/* Sticky section nav (desktop) */}

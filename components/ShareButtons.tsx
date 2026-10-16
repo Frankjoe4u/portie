@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Icon from "@/components/Icon";
 
 export default function ShareButtons({ url, title }: { url: string; title: string }) {
   const [copied, setCopied] = useState(false);

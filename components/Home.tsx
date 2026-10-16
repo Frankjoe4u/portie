@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { site } from "@/data/site";
 import { techIcons } from "@/data/techIcons";
 import Icon from "@/components/Icon";
@@ -16,6 +17,12 @@ const shipped = [
   "Paystack webhook verified server-side",
   "Unique booking code + email confirmation",
   "Deployed to production",
+];
+
+const stats = [
+  { value: "10+", label: "Projects shipped" },
+  { value: "1", label: "Hotel running in production" },
+  { value: "2021", label: "Building since" },
 ];
 
 const chips = [
@@ -63,7 +70,7 @@ export default function Home() {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a href="/#projects" className="btn btn-cyan px-6 py-3">
+            <a href="/#projects" className="btn btn-cyan cta-glow px-6 py-3">
               View My Work
               <Icon name="arrow" />
             </a>
@@ -87,7 +94,21 @@ export default function Home() {
             </a>
           </div>
 
-          <p className="mt-6 flex items-center gap-2 text-xs text-muted">
+          <dl className="mt-9 grid max-w-xl grid-cols-3 divide-x divide-line overflow-hidden rounded-2xl border border-line bg-card/70 backdrop-blur">
+            {stats.map((st) => (
+              <div key={st.label} className="px-3 py-3.5 text-center sm:px-5">
+                <dt className="sr-only">{st.label}</dt>
+                <dd className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
+                  <span className="text-hero-gradient">{st.value}</span>
+                </dd>
+                <p className="mt-0.5 text-[10px] leading-tight text-muted sm:text-[11px]" aria-hidden="true">
+                  {st.label}
+                </p>
+              </div>
+            ))}
+          </dl>
+
+          <p className="mt-5 flex items-center gap-2 text-xs text-muted">
             <Icon name="pin" className="h-3.5 w-3.5" strokeWidth={2} />
             Based in Nigeria &middot; Available remotely
           </p>
@@ -123,7 +144,7 @@ export default function Home() {
           <div className="relative mx-auto w-[17rem] sm:w-[25rem] lg:w-[29rem]">
             {/* offset outline hex */}
             <div
-              className="hex absolute inset-0 translate-x-5 translate-y-4 rotate-[8deg] bg-linear-to-br from-[#00c6ff] to-[#8b5cf6] p-[2px] opacity-60"
+              className="hex absolute inset-0 translate-x-5 translate-y-4 rotate-[8deg] bg-linear-to-br from-[#00c6ff] to-[#8b5cf6] p-0.5 opacity-60"
               aria-hidden="true"
             >
               <div className="hex h-full w-full bg-bg" />
@@ -131,7 +152,7 @@ export default function Home() {
 
             {/* main portrait */}
             <div className="relative drop-shadow-[0_24px_50px_var(--cyan-glow)]">
-              <div className="hex bg-linear-to-br from-[#00c6ff] via-[#2f7bff] to-[#8b5cf6] p-[5px]">
+              <div className="hex bg-linear-to-br from-[#00c6ff] via-[#2f7bff] to-[#8b5cf6] p-1.25">
                 <div className="hex relative aspect-square w-full bg-surface">
                   <HeroPortraits />
                 </div>
@@ -152,7 +173,21 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="relative z-10 -mt-10 w-full rounded-2xl border border-line bg-card/95 p-4 shadow-xl backdrop-blur sm:-mt-14 sm:p-5">
+          <div className="relative z-10 -mt-10 w-full overflow-hidden rounded-2xl border border-line bg-card/95 shadow-xl backdrop-blur sm:-mt-14">
+            <div className="relative aspect-16/7 w-full">
+              <Image
+                src="/5g-hotel/hero-1-tablet.jpg"
+                alt="5G Hotel Nsukka, the hotel system I built and run in production"
+                fill
+                sizes="(min-width: 1024px) 576px, 90vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" aria-hidden="true" />
+              <p className="absolute bottom-2.5 left-3.5 text-xs font-semibold text-white drop-shadow">
+                5G Hotel &middot; Nsukka
+              </p>
+            </div>
+            <div className="p-4 sm:p-5">
             <div className="flex items-center justify-between">
               <p className="kicker">production / 5g-hotel</p>
               <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-500">
@@ -170,9 +205,21 @@ export default function Home() {
                 </li>
               ))}
             </ul>
+            </div>
           </div>
         </div>
       </div>
+
+      <a
+        href="/#about"
+        aria-label="Scroll to About"
+        className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted transition-colors hover:text-ink lg:flex"
+      >
+        Scroll
+        <span className="flex h-8 w-5 justify-center rounded-full border border-line pt-1.5">
+          <span className="h-1.5 w-0.5 animate-bounce rounded-full bg-(--cyan)" />
+        </span>
+      </a>
     </section>
   );
 }

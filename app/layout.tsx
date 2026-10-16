@@ -32,8 +32,8 @@ export const metadata: Metadata = {
   },
   description: site.description,
   keywords: [...site.keywords],
-  authors: [{ name: site.name, url: site.url }],
-  creator: site.name,
+  authors: [{ name: site.legalName, url: site.url }],
+  creator: site.legalName,
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {

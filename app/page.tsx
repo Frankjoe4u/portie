@@ -21,7 +21,8 @@ export const revalidate = 3600;
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: site.name,
+  name: site.legalName,
+  alternateName: site.name,
   jobTitle: site.role,
   url: site.url,
   email: "mailto:" + site.email,

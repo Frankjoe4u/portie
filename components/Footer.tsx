@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         <p className="mt-10 border-t border-line pt-6 text-xs text-muted">
-          &copy; {new Date().getFullYear()} Frank Joe. All rights reserved.
+          &copy; {new Date().getFullYear()} {site.legalName} ({site.name}). All rights reserved.
         </p>
       </div>
     </footer>

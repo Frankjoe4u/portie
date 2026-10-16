@@ -1,9 +1,10 @@
 param(
     [string]$ApiUrl = "https://fjoe.vercel.app",
-    [string]$Secret = "frankjoe_seed_2026",
+    [string]$Secret = $env:SEED_SECRET,
     [string]$BlogsFile = "blogs.json"
 )
 
+if (-not $Secret) { Write-Host "ERROR: set `$env:SEED_SECRET first (same value as in Vercel)" -ForegroundColor Red; exit 1 }
 Write-Host "Loading $BlogsFile..." -ForegroundColor Cyan
 if (-not (Test-Path $BlogsFile)) { Write-Host "ERROR: $BlogsFile not found" -ForegroundColor Red; exit 1 }
 
