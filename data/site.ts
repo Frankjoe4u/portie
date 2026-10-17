@@ -10,7 +10,7 @@ export const site = {
   email: "frankjoe4u@gmail.com",
   location: "Nigeria",
   cv: "/Agbo_Franklin_Emeka_CV.pdf",
-  cvFileName: "Frank_Joe_CV.pdf",
+  cvFileName: "Agbo_Franklin_Emeka_CV.pdf",
   tagline: "Building software that solves real problems.",
   title: "Frank Joe \u2014 Full-Stack Software Engineer",
   description:
@@ -124,6 +124,9 @@ export const liveLinks = {
   medcore: "https://medcore-delta.vercel.app",
   fabsmile: "https://www.fabsmiledental.com",
   pharmalab: "", // add the PharmaLab live URL here to make it clickable
+  medspa: "", // add live URLs for these three to make them clickable
+  lezadental: "",
+  whfx: "",
 } as const;
 
 export const services = [
@@ -132,7 +135,9 @@ export const services = [
     text: "Multi-user applications with authentication, subscriptions, dashboards and role-based access.",
     color: "#3b73ff",
     icon: "layers",
-    built: [{ name: "StockPilot", href: liveLinks.stockpilot, external: true }, { name: "SmartCollege", href: liveLinks.smartcollege, external: true }],
+    built: [{ name: "StockPilot", href: liveLinks.stockpilot, external: true }, { name: "SmartCollege", href: liveLinks.smartcollege, external: true },
+      { name: "WHFX", href: liveLinks.whfx, external: true },
+    ],
     image: "/services/saas.svg",
   },
   {
@@ -140,7 +145,10 @@ export const services = [
     text: "Hotel, hospital, school, inventory, CRM and internal business platforms.",
     color: "#6366f1",
     icon: "briefcase",
-    built: [{ name: "5G Hotel", href: "/projects/5g-hotel" },{ name: "MedCore", href: liveLinks.medcore, external: true }, { name: "PharmaLab", href: liveLinks.pharmalab, external: true }, { name: "FabSmile DentalCare", href: liveLinks.fabsmile, external: true }],
+    built: [{ name: "5G Hotel", href: "/projects/5g-hotel" },{ name: "MedCore", href: liveLinks.medcore, external: true }, { name: "PharmaLab", href: liveLinks.pharmalab, external: true }, { name: "FabSmile DentalCare", href: liveLinks.fabsmile, external: true },
+      { name: "MedSpa", href: liveLinks.medspa, external: true },
+      { name: "Lezadental", href: liveLinks.lezadental, external: true },
+    ],
     image: "/services/business.svg",
   },
   {
@@ -161,10 +169,14 @@ export const services = [
   },
   {
     title: "AI-Powered Applications",
-    text: "AI assistants, intelligent search, automation and AI-driven workflows.",
+    text: "AI assistants, automated marking and results generation, intelligent search and AI-driven workflows.",
     color: "#d946ef",
     icon: "spark",
-    built: [],
+    built: [
+      { name: "SmartCollege AI Assistant", href: liveLinks.smartcollege, external: true },
+      { name: "AI Results Marking", href: liveLinks.smartcollege, external: true },
+      { name: "AI Results Generator", href: liveLinks.smartcollege, external: true },
+    ],
     image: "/services/ai.svg",
   },
   {
@@ -266,7 +278,7 @@ export const currentlyBuilding: {
 }[] = [
   {
     name: "SmartCollege",
-    text: "School management platform with role-based portals.",
+    text: "School management platform with role-based portals, an AI assistant, AI-assisted results marking and automatic results generation.",
     status: "active",
   },
 ];

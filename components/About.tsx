@@ -10,11 +10,19 @@ export default function About() {
       <div className="container-x relative grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
         <Reveal>
           <p className="eyebrow">About</p>
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink md:text-4xl">
+          <div className="mt-4 inline-flex flex-col rounded-2xl border border-line bg-card/70 px-5 py-3 backdrop-blur">
+            <span className="text-xl font-extrabold tracking-tight text-ink md:text-2xl">
+              <span className="text-hero-gradient">{site.legalName}</span>
+            </span>
+            <span className="mt-0.5 text-xs font-medium text-muted">
+              Known professionally as <strong className="font-semibold text-ink">{site.name}</strong>
+            </span>
+          </div>
+          <h2 className="mt-5 text-2xl font-bold tracking-tight text-ink md:text-4xl">
             Full-Stack Software Engineer building for real businesses
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted">
-            I&apos;m a Full-Stack Software Engineer focused on building
+            I&apos;m {site.legalName}, a Full-Stack Software Engineer focused on building
             production-ready web applications and business systems. I take a
             project from requirements to a deployed product, and I care that it
             keeps working once real people depend on it.
