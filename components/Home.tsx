@@ -76,11 +76,12 @@ export default function Home() {
             </a>
             <a
               href={site.cv}
-              download={site.cvFileName}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn btn-cyan-outline px-6 py-3"
             >
-              <Icon name="download" />
-              Download CV
+              <Icon name="external" />
+              View CV
             </a>
             <a
               href="/#contact"
@@ -144,7 +145,7 @@ export default function Home() {
           <div className="relative mx-auto w-[17rem] sm:w-[25rem] lg:w-[29rem]">
             {/* offset outline hex */}
             <div
-              className="hex absolute inset-0 translate-x-5 translate-y-4 rotate-[8deg] bg-linear-to-br from-[#00c6ff] to-[#8b5cf6] p-0.5 opacity-60"
+              className="hex absolute inset-0 translate-x-5 translate-y-4 rotate-[8deg] bg-linear-to-br from-[#00c6ff] to-[#8b5cf6] p-[2px] opacity-60"
               aria-hidden="true"
             >
               <div className="hex h-full w-full bg-bg" />
@@ -152,7 +153,7 @@ export default function Home() {
 
             {/* main portrait */}
             <div className="relative drop-shadow-[0_24px_50px_var(--cyan-glow)]">
-              <div className="hex bg-linear-to-br from-[#00c6ff] via-[#2f7bff] to-[#8b5cf6] p-1.25">
+              <div className="hex bg-linear-to-br from-[#00c6ff] via-[#2f7bff] to-[#8b5cf6] p-[5px]">
                 <div className="hex relative aspect-square w-full bg-surface">
                   <HeroPortraits />
                 </div>
@@ -174,7 +175,7 @@ export default function Home() {
           </div>
 
           <div className="relative z-10 -mt-10 w-full overflow-hidden rounded-2xl border border-line bg-card/95 shadow-xl backdrop-blur sm:-mt-14">
-            <div className="relative aspect-16/7 w-full">
+            <div className="relative aspect-[16/7] w-full">
               <Image
                 src="/5g-hotel/hero-1-tablet.jpg"
                 alt="5G Hotel Nsukka, the hotel system I built and run in production"

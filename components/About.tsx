@@ -39,12 +39,11 @@ export default function About() {
           </ul>
           <a
             href={site.cv}
-            target="_blank"
-            rel="noopener noreferrer"
+            download={site.cvFileName}
             className="btn btn-primary mt-8"
           >
-            View My CV
-            <Icon name="arrow" />
+            <Icon name="download" />
+            Download CV
           </a>
         </Reveal>
 

@@ -226,7 +226,6 @@ export const skillGroups: { title: string; items: SkillItem[] }[] = [
     items: [
       { name: "AWS", icon: "aws" },
       { name: "Vercel", icon: "vercel" },
-      { name: "Docker", icon: "docker" },
       { name: "Git", icon: "git" },
       { name: "GitHub", icon: "github" },
     ],
