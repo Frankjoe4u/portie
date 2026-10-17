@@ -123,7 +123,7 @@ export const liveLinks = {
   smartcollege: "https://smartcollege.vercel.app",
   medcore: "https://medcore-delta.vercel.app",
   fabsmile: "https://www.fabsmiledental.com",
-  pharmalab: "", // add the PharmaLab live URL here to make it clickable
+  pharmalab: "https://pharm-lab.vercel.app", // add the PharmaLab live URL here to make it clickable
   medspa: "", // add live URLs for these three to make them clickable
   lezadental: "",
   whfx: "",
